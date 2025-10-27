@@ -309,7 +309,8 @@ export const getDetailedS3Info = async () => {
 // Función principal para obtener todos los datos detallados del sistema
 export const getDetailedSystemStatus = async () => {
   try {
-    const [metrics, ec2Info, rdsInfo, s3Info] = await Promise.all([
+    // Intentar obtener datos detallados, pero con fallback a datos básicos
+    const [metrics, ec2Info, rdsInfo, s3Info] = await Promise.allSettled([
       getDetailedCloudWatchMetrics(),
       getDetailedEC2Instances(),
       getDetailedRDSInstances(),
@@ -317,15 +318,80 @@ export const getDetailedSystemStatus = async () => {
     ])
 
     return {
-      metrics,
-      ec2: ec2Info,
-      rds: rdsInfo,
-      s3: s3Info,
+      metrics: metrics.status === 'fulfilled' ? metrics.value : {
+        cpu: { average: 0, maximum: 0, minimum: 0, dataPoints: 0, trend: 0 },
+        memory: { average: 0, maximum: 0, minimum: 0, dataPoints: 0, trend: 0 },
+        disk: { average: 0, maximum: 0, minimum: 0, dataPoints: 0, trend: 0 },
+        timestamp: new Date().toISOString()
+      },
+      ec2: ec2Info.status === 'fulfilled' ? ec2Info.value : {
+        instances: [],
+        totalCount: 0,
+        runningCount: 0,
+        stoppedCount: 0,
+        terminatedCount: 0
+      },
+      rds: rdsInfo.status === 'fulfilled' ? rdsInfo.value : {
+        instances: [],
+        totalCount: 0,
+        availableCount: 0,
+        upgradingCount: 0,
+        otherStatusCount: 0
+      },
+      s3: s3Info.status === 'fulfilled' ? s3Info.value : {
+        bucketName: 'N/A',
+        exists: false,
+        objectCount: 0,
+        totalSizeBytes: 0,
+        totalSizeGB: 0,
+        avgObjectSizeBytes: 0,
+        avgObjectSizeMB: 0,
+        fileTypes: {},
+        recentFiles: [],
+        lastModified: undefined
+      },
       timestamp: new Date().toISOString(),
       sdkVersion: 'v3'
     }
   } catch (error) {
     console.error('Error getting detailed system status:', error)
-    throw error
+    
+    // Retornar datos por defecto en caso de error
+    return {
+      metrics: {
+        cpu: { average: 0, maximum: 0, minimum: 0, dataPoints: 0, trend: 0 },
+        memory: { average: 0, maximum: 0, minimum: 0, dataPoints: 0, trend: 0 },
+        disk: { average: 0, maximum: 0, minimum: 0, dataPoints: 0, trend: 0 },
+        timestamp: new Date().toISOString()
+      },
+      ec2: {
+        instances: [],
+        totalCount: 0,
+        runningCount: 0,
+        stoppedCount: 0,
+        terminatedCount: 0
+      },
+      rds: {
+        instances: [],
+        totalCount: 0,
+        availableCount: 0,
+        upgradingCount: 0,
+        otherStatusCount: 0
+      },
+      s3: {
+        bucketName: 'N/A',
+        exists: false,
+        objectCount: 0,
+        totalSizeBytes: 0,
+        totalSizeGB: 0,
+        avgObjectSizeBytes: 0,
+        avgObjectSizeMB: 0,
+        fileTypes: {},
+        recentFiles: [],
+        lastModified: undefined
+      },
+      timestamp: new Date().toISOString(),
+      sdkVersion: 'v3'
+    }
   }
 }

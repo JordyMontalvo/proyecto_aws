@@ -198,7 +198,7 @@ export function S3Table({ data }: S3TableProps) {
         </h3>
         <div className="text-right">
           <div className="text-2xl font-bold text-gray-900">
-            {data.totalSizeGB.toFixed(2)} GB
+            {(data.totalSizeGB || 0).toFixed(2)} GB
           </div>
           <div className="text-sm text-gray-600">
             {data.objectCount} objetos
@@ -213,7 +213,7 @@ export function S3Table({ data }: S3TableProps) {
             <span className="font-semibold text-gray-700">Tamaño Total</span>
           </div>
           <div className="text-2xl font-bold text-gray-900">
-            {data.totalSizeGB.toFixed(2)} GB
+            {(data.totalSizeGB || 0).toFixed(2)} GB
           </div>
           <div className="text-sm text-gray-600">
             {data.totalSizeBytes.toLocaleString()} bytes
@@ -229,7 +229,7 @@ export function S3Table({ data }: S3TableProps) {
             {data.objectCount.toLocaleString()}
           </div>
           <div className="text-sm text-gray-600">
-            Promedio: {data.avgObjectSizeMB.toFixed(2)} MB
+            Promedio: {(data.avgObjectSizeMB || 0).toFixed(2)} MB
           </div>
         </div>
 
@@ -278,7 +278,7 @@ export function S3Table({ data }: S3TableProps) {
                     {file.key}
                   </td>
                   <td className="py-2 px-3 text-gray-600">
-                    {file.sizeMB.toFixed(2)} MB
+                    {(file.sizeMB || 0).toFixed(2)} MB
                   </td>
                   <td className="py-2 px-3 text-gray-600">
                     {new Date(file.lastModified).toLocaleString('es-ES')}
@@ -347,7 +347,7 @@ export function MetricsCard({ data }: MetricsCardProps) {
             </div>
             
             <div className="text-3xl font-bold text-gray-900 mb-2">
-              {metric.value.toFixed(1)}{metric.unit}
+              {(metric.value || 0).toFixed(1)}{metric.unit}
             </div>
             
             <div className="flex items-center text-sm text-gray-600 mb-3">
@@ -357,18 +357,18 @@ export function MetricsCard({ data }: MetricsCardProps) {
                 <TrendingDown className="h-4 w-4 text-green-500 mr-1" />
               )}
               <span>
-                {metric.trend > 0 ? '+' : ''}{metric.trend.toFixed(1)}% vs inicio
+                {metric.trend > 0 ? '+' : ''}{(metric.trend || 0).toFixed(1)}% vs inicio
               </span>
             </div>
 
             <div className="space-y-2 text-sm text-gray-600">
               <div className="flex justify-between">
                 <span>Máximo:</span>
-                <span className="font-semibold">{metric.max.toFixed(1)}{metric.unit}</span>
+                <span className="font-semibold">{(metric.max || 0).toFixed(1)}{metric.unit}</span>
               </div>
               <div className="flex justify-between">
                 <span>Mínimo:</span>
-                <span className="font-semibold">{metric.min.toFixed(1)}{metric.unit}</span>
+                <span className="font-semibold">{(metric.min || 0).toFixed(1)}{metric.unit}</span>
               </div>
               <div className="flex justify-between">
                 <span>Puntos de datos:</span>
