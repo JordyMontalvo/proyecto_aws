@@ -51,14 +51,14 @@ function ModernMetricCard({
   }
 
   const colorGradients = {
-    blue: 'from-cyan-400 to-blue-500',
-    green: 'from-emerald-400 to-teal-500',
-    yellow: 'from-yellow-400 to-orange-500',
-    red: 'from-red-400 to-pink-500',
-    purple: 'from-purple-400 to-indigo-500',
-    teal: 'from-teal-400 to-cyan-500',
-    pink: 'from-pink-400 to-rose-500',
-    orange: 'from-orange-400 to-red-500'
+    blue: 'from-blue-500 to-blue-600',
+    green: 'from-green-500 to-green-600',
+    yellow: 'from-yellow-500 to-yellow-600',
+    red: 'from-red-500 to-red-600',
+    purple: 'from-purple-500 to-purple-600',
+    teal: 'from-teal-500 to-teal-600',
+    pink: 'from-pink-500 to-pink-600',
+    orange: 'from-orange-500 to-orange-600'
   }
 
   const cardClass = status === 'normal' ? 'metric-card' : 
@@ -170,11 +170,11 @@ export default function Dashboard() {
   const metrics = finalData ? [
     {
       title: 'CPU Promedio',
-      value: `${finalData.metrics?.cpu?.average?.toFixed(1) || '0.0'}%`,
+      value: `${finalData.metrics?.cpu && typeof finalData.metrics.cpu === 'object' && 'average' in finalData.metrics.cpu ? finalData.metrics.cpu.average?.toFixed(1) || '0.0' : '0.0'}%`,
       icon: Activity,
-      trend: finalData.metrics?.cpu?.trend > 0 ? `+${finalData.metrics.cpu.trend.toFixed(1)}%` : undefined,
-      status: (finalData.metrics?.cpu?.average || 0) > 80 ? 'critical' : (finalData.metrics?.cpu?.average || 0) > 60 ? 'warning' : 'normal',
-      color: 'red',
+      trend: finalData.metrics?.cpu && typeof finalData.metrics.cpu === 'object' && 'trend' in finalData.metrics.cpu && finalData.metrics.cpu.trend > 0 ? `+${finalData.metrics.cpu.trend.toFixed(1)}%` : undefined,
+      status: (finalData.metrics?.cpu && typeof finalData.metrics.cpu === 'object' && 'average' in finalData.metrics.cpu ? finalData.metrics.cpu.average || 0 : 0) > 80 ? 'critical' as const : (finalData.metrics?.cpu && typeof finalData.metrics.cpu === 'object' && 'average' in finalData.metrics.cpu ? finalData.metrics.cpu.average || 0 : 0) > 60 ? 'warning' as const : 'normal' as const,
+      color: 'blue' as const,
       subtitle: 'Últimos 5 minutos'
     },
     {
@@ -182,76 +182,76 @@ export default function Dashboard() {
       value: `${finalData.s3?.totalSizeGB?.toFixed(2) || '0.00'} GB`,
       icon: Database,
       trend: finalData.s3?.objectCount ? `${finalData.s3.objectCount} objetos` : undefined,
-      status: 'normal',
-      color: 'teal',
+      status: 'normal' as const,
+      color: 'green' as const,
       subtitle: 'Total utilizado'
     },
     {
       title: 'Instancias EC2',
-      value: finalData.ec2?.runningCount || 0,
+      value: finalData.ec2 && typeof finalData.ec2 === 'object' && 'runningCount' in finalData.ec2 ? finalData.ec2.runningCount || 0 : 0,
       icon: Server,
-      trend: finalData.ec2?.totalCount ? `${finalData.ec2.totalCount} total` : undefined,
-      status: (finalData.ec2?.runningCount || 0) === 0 ? 'critical' : 'normal',
-      color: 'purple',
+      trend: finalData.ec2 && typeof finalData.ec2 === 'object' && 'totalCount' in finalData.ec2 ? `${finalData.ec2.totalCount} total` : undefined,
+      status: (finalData.ec2 && typeof finalData.ec2 === 'object' && 'runningCount' in finalData.ec2 ? finalData.ec2.runningCount || 0 : 0) === 0 ? 'critical' as const : 'normal' as const,
+      color: 'purple' as const,
       subtitle: 'Activas'
     },
     {
       title: 'Estado RDS',
-      value: finalData.rds?.availableCount || 0,
+      value: finalData.rds && typeof finalData.rds === 'object' && 'availableCount' in finalData.rds ? finalData.rds.availableCount || 0 : 0,
       icon: Database,
-      trend: finalData.rds?.totalCount ? `${finalData.rds.totalCount} instancias` : undefined,
-      status: (finalData.rds?.availableCount || 0) === 0 ? 'critical' : 'normal',
-      color: 'orange',
+      trend: finalData.rds && typeof finalData.rds === 'object' && 'totalCount' in finalData.rds ? `${finalData.rds.totalCount} instancias` : undefined,
+      status: (finalData.rds && typeof finalData.rds === 'object' && 'availableCount' in finalData.rds ? finalData.rds.availableCount || 0 : 0) === 0 ? 'critical' as const : 'normal' as const,
+      color: 'yellow' as const,
       subtitle: 'Disponibles'
     }
   ] : []
 
   // Servicios con estado real
   const services = finalData ? [
-    { name: 'EC2 Instances', status: (finalData.ec2?.runningCount || 0) > 0 ? 'online' : 'offline' as const, lastUpdate: 'Ahora' },
-    { name: 'RDS Database', status: (finalData.rds?.availableCount || 0) > 0 ? 'online' : 'offline' as const, lastUpdate: 'Ahora' },
-    { name: 'S3 Storage', status: finalData.s3?.exists ? 'online' : 'offline' as const, lastUpdate: 'Ahora' },
-    { name: 'CloudWatch', status: finalData.metrics ? 'online' : 'offline' as const, lastUpdate: 'Ahora' },
+    { name: 'EC2 Instances', status: (finalData.ec2 && typeof finalData.ec2 === 'object' && 'runningCount' in finalData.ec2 ? finalData.ec2.runningCount || 0 : 0) > 0 ? 'online' as const : 'offline' as const, lastUpdate: 'Ahora' },
+    { name: 'RDS Database', status: (finalData.rds && typeof finalData.rds === 'object' && 'availableCount' in finalData.rds ? finalData.rds.availableCount || 0 : 0) > 0 ? 'online' as const : 'offline' as const, lastUpdate: 'Ahora' },
+    { name: 'S3 Storage', status: finalData.s3?.exists ? 'online' as const : 'offline' as const, lastUpdate: 'Ahora' },
+    { name: 'CloudWatch', status: finalData.metrics ? 'online' as const : 'offline' as const, lastUpdate: 'Ahora' },
     { name: 'Application Load Balancer', status: 'online' as const, lastUpdate: 'Ahora' }
   ] : []
 
   if (finalLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-red-400 via-teal-400 via-blue-400 to-yellow-400 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-200 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-white/30 border-t-white rounded-full animate-spin mx-auto mb-4"></div>
-          <h2 className="text-2xl font-bold text-white mb-2">Cargando Dashboard</h2>
-          <p className="text-white/80">Conectando con servicios AWS...</p>
+          <div className="w-16 h-16 border-4 border-slate-300 border-t-blue-500 rounded-full animate-spin mx-auto mb-4"></div>
+          <h2 className="text-2xl font-bold text-slate-800 mb-2">Cargando Dashboard</h2>
+          <p className="text-slate-600">Conectando con servicios AWS...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-400 via-teal-400 via-blue-400 to-yellow-400">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-200">
       {/* Header Glassmorphism */}
       <div className="header-glass">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-gradient-to-r from-red-500 via-teal-500 to-yellow-500 rounded-xl flex items-center justify-center float-animation">
+              <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
                 <Eye className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-white">VIGILA</h1>
-                <p className="text-sm text-white/80">Sistema de Vigilancia Inteligente</p>
+                <h1 className="text-2xl font-bold text-slate-800">VIGILA</h1>
+                <p className="text-sm text-slate-600">Sistema de Vigilancia Inteligente</p>
               </div>
             </div>
             
             <div className="flex items-center space-x-6">
               <div className="text-right">
-                <div className="text-sm text-white/80">Tiempo Actual</div>
-                <div className="text-lg font-mono text-white">{currentTime}</div>
+                <div className="text-sm text-slate-600">Tiempo Actual</div>
+                <div className="text-lg font-mono text-slate-800">{currentTime}</div>
               </div>
               
               <div className="flex items-center space-x-2">
-                <div className={`w-3 h-3 rounded-full animate-pulse ${finalData ? 'bg-green-400' : 'bg-yellow-400'}`}></div>
-                <span className="text-sm font-medium text-white">
+                <div className={`w-3 h-3 rounded-full animate-pulse ${finalData ? 'bg-green-500' : 'bg-yellow-500'}`}></div>
+                <span className="text-sm font-medium text-slate-800">
                   {finalData ? 'AWS Conectado' : 'AWS Desconectado'}
                 </span>
               </div>
@@ -286,27 +286,27 @@ export default function Dashboard() {
           <>
             {/* Hero Section */}
             <div className="text-center mb-12 fade-in">
-              <h2 className="text-5xl font-bold text-white mb-4">
+              <h2 className="text-5xl font-bold text-slate-800 mb-4">
                 Dashboard de Monitoreo
               </h2>
-              <p className="text-xl text-white/80 font-medium max-w-3xl mx-auto slide-up">
+              <p className="text-xl text-slate-600 font-medium max-w-3xl mx-auto slide-up">
                 Monitoreo en tiempo real del sistema de vigilancia desplegado en AWS
               </p>
               <div className="mt-8 flex justify-center space-x-6">
-                <div className="flex items-center space-x-2 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 backdrop-blur-md px-6 py-3 rounded-full border border-emerald-400/30">
-                  <div className="w-3 h-3 bg-emerald-400 rounded-full animate-pulse"></div>
-                  <span className="text-sm font-medium text-white">Sistema Activo</span>
+                <div className="flex items-center space-x-2 bg-white/80 backdrop-blur-md px-6 py-3 rounded-full border border-green-200 shadow-sm">
+                  <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                  <span className="text-sm font-medium text-slate-700">Sistema Activo</span>
                 </div>
-                <div className="flex items-center space-x-2 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 backdrop-blur-md px-6 py-3 rounded-full border border-blue-400/30">
-                  <div className={`w-3 h-3 rounded-full animate-pulse ${finalData ? 'bg-blue-400' : 'bg-yellow-400'}`}></div>
-                  <span className="text-sm font-medium text-white">
+                <div className="flex items-center space-x-2 bg-white/80 backdrop-blur-md px-6 py-3 rounded-full border border-blue-200 shadow-sm">
+                  <div className={`w-3 h-3 rounded-full animate-pulse ${finalData ? 'bg-blue-500' : 'bg-yellow-500'}`}></div>
+                  <span className="text-sm font-medium text-slate-700">
                     {finalData ? 'AWS Conectado' : 'AWS Desconectado'}
                   </span>
                 </div>
                 {finalData && (
-                  <div className="flex items-center space-x-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-md px-6 py-3 rounded-full border border-purple-400/30">
-                    <div className="w-3 h-3 bg-purple-400 rounded-full animate-pulse"></div>
-                    <span className="text-sm font-medium text-purple-100">
+                  <div className="flex items-center space-x-2 bg-white/80 backdrop-blur-md px-6 py-3 rounded-full border border-purple-200 shadow-sm">
+                    <div className="w-3 h-3 bg-purple-500 rounded-full animate-pulse"></div>
+                    <span className="text-sm font-medium text-slate-700">
                       Datos en Tiempo Real (SDK v3)
                     </span>
                   </div>

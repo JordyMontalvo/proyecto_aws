@@ -31,22 +31,22 @@ export function EC2Table({ data }: EC2TableProps) {
   return (
     <div className="card">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-2xl font-bold text-white flex items-center">
-          <Server className="h-6 w-6 mr-3 text-blue-400" />
+        <h3 className="text-2xl font-bold text-slate-800 flex items-center">
+          <Server className="h-6 w-6 mr-3 text-blue-500" />
           Instancias EC2
         </h3>
         <div className="flex space-x-4 text-sm">
           <div className="flex items-center">
-            <div className="w-3 h-3 bg-green-400 rounded-full mr-2 animate-pulse"></div>
-            <span className="text-white/80">Running: {data.runningCount}</span>
+            <div className="w-3 h-3 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+            <span className="text-slate-600">Running: {data.runningCount}</span>
           </div>
           <div className="flex items-center">
-            <div className="w-3 h-3 bg-red-400 rounded-full mr-2"></div>
-            <span className="text-white/80">Stopped: {data.stoppedCount}</span>
+            <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+            <span className="text-slate-600">Stopped: {data.stoppedCount}</span>
           </div>
           <div className="flex items-center">
-            <div className="w-3 h-3 bg-gray-400 rounded-full mr-2"></div>
-            <span className="text-white/80">Terminated: {data.terminatedCount}</span>
+            <div className="w-3 h-3 bg-gray-500 rounded-full mr-2"></div>
+            <span className="text-slate-600">Terminated: {data.terminatedCount}</span>
           </div>
         </div>
       </div>
@@ -67,10 +67,10 @@ export function EC2Table({ data }: EC2TableProps) {
           <tbody>
             {data.instances.map((instance) => (
               <tr key={instance.id}>
-                <td className="font-mono text-sm text-blue-300">
+                <td className="font-mono text-sm text-blue-600">
                   {instance.id}
                 </td>
-                <td className="font-medium text-white">
+                <td className="font-medium text-slate-800">
                   {instance.name}
                 </td>
                 <td>
@@ -78,16 +78,16 @@ export function EC2Table({ data }: EC2TableProps) {
                     {instance.state}
                   </span>
                 </td>
-                <td className="text-white/80">
+                <td className="text-slate-600">
                   {instance.type}
                 </td>
-                <td className="font-mono text-sm text-cyan-300">
+                <td className="font-mono text-sm text-blue-600">
                   {instance.publicIp || 'N/A'}
                 </td>
-                <td className="text-white/80">
+                <td className="text-slate-600">
                   {instance.availabilityZone}
                 </td>
-                <td className="text-white/80">
+                <td className="text-slate-600">
                   {new Date(instance.launchTime).toLocaleDateString('es-ES')}
                 </td>
               </tr>
@@ -116,22 +116,22 @@ export function RDSTable({ data }: RDSTableProps) {
   return (
     <div className="card">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-2xl font-bold text-white flex items-center">
-          <Database className="h-6 w-6 mr-3 text-green-400" />
+        <h3 className="text-2xl font-bold text-slate-800 flex items-center">
+          <Database className="h-6 w-6 mr-3 text-green-500" />
           Base de Datos RDS
         </h3>
         <div className="flex space-x-4 text-sm">
           <div className="flex items-center">
-            <div className="w-3 h-3 bg-green-400 rounded-full mr-2 animate-pulse"></div>
-            <span className="text-white/80">Available: {data.availableCount}</span>
+            <div className="w-3 h-3 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+            <span className="text-slate-600">Available: {data.availableCount}</span>
           </div>
           <div className="flex items-center">
-            <div className="w-3 h-3 bg-blue-400 rounded-full mr-2"></div>
-            <span className="text-white/80">Upgrading: {data.upgradingCount}</span>
+            <div className="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+            <span className="text-slate-600">Upgrading: {data.upgradingCount}</span>
           </div>
           <div className="flex items-center">
-            <div className="w-3 h-3 bg-yellow-400 rounded-full mr-2"></div>
-            <span className="text-white/80">Other: {data.otherStatusCount}</span>
+            <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
+            <span className="text-slate-600">Other: {data.otherStatusCount}</span>
           </div>
         </div>
       </div>
@@ -152,7 +152,7 @@ export function RDSTable({ data }: RDSTableProps) {
           <tbody>
             {data.instances.map((instance) => (
               <tr key={instance.id}>
-                <td className="font-mono text-sm text-green-300">
+                <td className="font-mono text-sm text-green-600">
                   {instance.id}
                 </td>
                 <td>
@@ -160,19 +160,19 @@ export function RDSTable({ data }: RDSTableProps) {
                     {instance.status}
                   </span>
                 </td>
-                <td className="text-white/80">
+                <td className="text-slate-600">
                   {instance.engine} {instance.engineVersion}
                 </td>
-                <td className="text-white/80">
+                <td className="text-slate-600">
                   {instance.instanceClass}
                 </td>
-                <td className="text-white/80">
+                <td className="text-slate-600">
                   {instance.allocatedStorage} GB ({instance.storageType})
                 </td>
-                <td className="font-mono text-sm text-cyan-300">
+                <td className="font-mono text-sm text-blue-600">
                   {instance.endpoint || 'N/A'}
                 </td>
-                <td className="text-white/80">
+                <td className="text-slate-600">
                   {instance.availabilityZone}
                 </td>
               </tr>
@@ -192,15 +192,15 @@ export function S3Table({ data }: S3TableProps) {
   return (
     <div className="card">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-2xl font-bold text-white flex items-center">
-          <HardDrive className="h-6 w-6 mr-3 text-purple-400" />
+        <h3 className="text-2xl font-bold text-slate-800 flex items-center">
+          <HardDrive className="h-6 w-6 mr-3 text-purple-500" />
           Almacenamiento S3
         </h3>
         <div className="text-right">
-          <div className="text-2xl font-bold text-white">
+          <div className="text-2xl font-bold text-slate-800">
             {(data.totalSizeGB || 0).toFixed(2)} GB
           </div>
-          <div className="text-sm text-white/80">
+          <div className="text-sm text-slate-600">
             {data.objectCount} objetos
           </div>
         </div>
@@ -209,36 +209,36 @@ export function S3Table({ data }: S3TableProps) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <div className="data-card">
           <div className="flex items-center mb-2">
-            <HardDrive className="h-5 w-5 text-purple-400 mr-2" />
-            <span className="font-semibold text-white">Tamaño Total</span>
+            <HardDrive className="h-5 w-5 text-purple-500 mr-2" />
+            <span className="font-semibold text-slate-700">Tamaño Total</span>
           </div>
-          <div className="text-2xl font-bold text-white">
+          <div className="text-2xl font-bold text-slate-800">
             {(data.totalSizeGB || 0).toFixed(2)} GB
           </div>
-          <div className="text-sm text-white/60">
+          <div className="text-sm text-slate-500">
             {data.totalSizeBytes.toLocaleString()} bytes
           </div>
         </div>
 
         <div className="data-card">
           <div className="flex items-center mb-2">
-            <Activity className="h-5 w-5 text-blue-400 mr-2" />
-            <span className="font-semibold text-white">Objetos</span>
+            <Activity className="h-5 w-5 text-blue-500 mr-2" />
+            <span className="font-semibold text-slate-700">Objetos</span>
           </div>
-          <div className="text-2xl font-bold text-white">
+          <div className="text-2xl font-bold text-slate-800">
             {data.objectCount.toLocaleString()}
           </div>
-          <div className="text-sm text-white/60">
+          <div className="text-sm text-slate-500">
             Promedio: {(data.avgObjectSizeMB || 0).toFixed(2)} MB
           </div>
         </div>
 
         <div className="data-card">
           <div className="flex items-center mb-2">
-            <Clock className="h-5 w-5 text-green-400 mr-2" />
-            <span className="font-semibold text-white">Última Modificación</span>
+            <Clock className="h-5 w-5 text-green-500 mr-2" />
+            <span className="font-semibold text-slate-700">Última Modificación</span>
           </div>
-          <div className="text-sm font-bold text-white">
+          <div className="text-sm font-bold text-slate-800">
             {data.lastModified ? 
               new Date(data.lastModified).toLocaleString('es-ES') : 
               'N/A'
@@ -249,10 +249,10 @@ export function S3Table({ data }: S3TableProps) {
 
       {/* Tipos de archivo */}
       <div className="mb-6">
-        <h4 className="font-semibold text-white mb-3">Tipos de Archivo</h4>
+        <h4 className="font-semibold text-slate-700 mb-3">Tipos de Archivo</h4>
         <div className="flex flex-wrap gap-2">
           {Object.entries(data.fileTypes).map(([type, count]) => (
-            <div key={type} className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-200 px-3 py-1 rounded-full text-sm border border-purple-400/30">
+            <div key={type} className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm border border-blue-200">
               {type}: {count}
             </div>
           ))}
@@ -261,7 +261,7 @@ export function S3Table({ data }: S3TableProps) {
 
       {/* Archivos recientes */}
       <div>
-        <h4 className="font-semibold text-white mb-3">Archivos Recientes</h4>
+        <h4 className="font-semibold text-slate-700 mb-3">Archivos Recientes</h4>
         <div className="modern-table">
           <table>
             <thead>
@@ -274,13 +274,13 @@ export function S3Table({ data }: S3TableProps) {
             <tbody>
               {data.recentFiles.slice(0, 5).map((file, index) => (
                 <tr key={index}>
-                  <td className="font-mono text-sm text-cyan-300">
+                  <td className="font-mono text-sm text-blue-600">
                     {file.key}
                   </td>
-                  <td className="text-white/80">
+                  <td className="text-slate-600">
                     {(file.sizeMB || 0).toFixed(2)} MB
                   </td>
-                  <td className="text-white/80">
+                  <td className="text-slate-600">
                     {new Date(file.lastModified).toLocaleString('es-ES')}
                   </td>
                 </tr>
