@@ -20,7 +20,8 @@ import {
   RefreshCw
 } from 'lucide-react'
 import CameraGrid from '../components/CameraGrid'
-import CameraCapture from '../components/CameraCapture'
+import RealCameraCapture from '../components/RealCameraCapture'
+import SurveillanceDemo from '../components/SurveillanceDemo'
 import AWSStatus from '../components/AWSStatus'
 import { EC2Table, RDSTable, S3Table, MetricsCard } from '../components/DetailedTables'
 import { useDetailedAWSData } from '../lib/useDetailedAWSData'
@@ -396,7 +397,11 @@ export default function Dashboard() {
             </div>
             
             <div className="card">
-              <CameraCapture />
+              <RealCameraCapture />
+            </div>
+            
+            <div className="card">
+              <SurveillanceDemo />
             </div>
             
             <div className="card">
