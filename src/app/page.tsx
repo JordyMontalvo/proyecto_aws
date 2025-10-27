@@ -17,6 +17,7 @@ import {
   BarChart3
 } from 'lucide-react'
 import CameraGrid from '../components/CameraGrid'
+import AWSStatus from '../components/AWSStatus'
 import { useAWSData } from '../lib/useAWSData'
 
 // Componente de tarjeta de métrica mejorado
@@ -111,8 +112,8 @@ export default function Dashboard() {
   const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString('es-ES'))
   const [activeTab, setActiveTab] = useState<'overview' | 'cameras' | 'analytics'>('overview')
   
-  // Integración con AWS (opcional - descomentar para usar datos reales)
-  // const { data: awsData, loading: awsLoading, error: awsError } = useAWSData(30000)
+  // Integración con AWS - ACTIVADA
+  const { data: awsData, loading: awsLoading, error: awsError } = useAWSData(30000)
 
   useEffect(() => {
     // Actualizar tiempo cada segundo
@@ -125,8 +126,15 @@ export default function Dashboard() {
     }
   }, [])
 
-  // Datos simulados para la demo (por ahora)
-  const metrics = [
+  // Datos reales de AWS o simulados como fallback
+  const metrics = awsData ? [
+    { title: 'Cámaras Activas', value: '4/4', icon: Camera, trend: '+0% desde ayer', status: 'normal' as const, color: 'blue' as const },
+    { title: 'Alertas Hoy', value: '12', icon: AlertTriangle, trend: '-25% vs ayer', status: 'normal' as const, color: 'yellow' as const },
+    { title: 'Uso de CPU', value: `${awsData.metrics?.cpu || 0}%`, icon: Activity, trend: 'En tiempo real', status: 'normal' as const, color: 'green' as const },
+    { title: 'Almacenamiento', value: `${(awsData.s3?.totalSizeGB || 0).toFixed(2)} GB`, icon: Database, trend: 'AWS S3', status: 'normal' as const, color: 'purple' as const },
+    { title: 'Instancias EC2', value: `${awsData.ec2?.length || 0}`, icon: Users, trend: 'Activas', status: 'normal' as const, color: 'blue' as const },
+    { title: 'Tiempo de Respuesta', value: `${awsData.alb?.responseTime || 0}ms`, icon: Clock, trend: 'ALB', status: 'normal' as const, color: 'green' as const }
+  ] : [
     { title: 'Cámaras Activas', value: '4/4', icon: Camera, trend: '+0% desde ayer', status: 'normal' as const, color: 'blue' as const },
     { title: 'Alertas Hoy', value: '12', icon: AlertTriangle, trend: '-25% vs ayer', status: 'normal' as const, color: 'yellow' as const },
     { title: 'Uso de CPU', value: '23%', icon: Activity, trend: 'Estable', status: 'normal' as const, color: 'green' as const },
@@ -135,7 +143,13 @@ export default function Dashboard() {
     { title: 'Tiempo de Respuesta', value: '45ms', icon: Clock, trend: 'Excelente', status: 'normal' as const, color: 'green' as const }
   ]
 
-  const services = [
+  const services = awsData ? [
+    { name: 'AWS EC2 - Servidor Principal', status: (awsData.ec2?.[0]?.state === 'running' ? 'online' : 'offline') as const, lastUpdate: 'En tiempo real' },
+    { name: 'AWS RDS - Base de Datos', status: (awsData.rds?.[0]?.status === 'available' ? 'online' : 'offline') as const, lastUpdate: 'En tiempo real' },
+    { name: 'AWS S3 - Almacenamiento', status: (awsData.s3?.exists ? 'online' : 'offline') as const, lastUpdate: 'En tiempo real' },
+    { name: 'CloudWatch - Monitoreo', status: 'online' as const, lastUpdate: 'En tiempo real' },
+    { name: 'Application Load Balancer', status: 'online' as const, lastUpdate: 'En tiempo real' }
+  ] : [
     { name: 'AWS EC2 - Servidor Principal', status: 'online' as const, lastUpdate: 'Hace 30 segundos' },
     { name: 'AWS RDS - Base de Datos', status: 'online' as const, lastUpdate: 'Hace 1 minuto' },
     { name: 'AWS S3 - Almacenamiento', status: 'online' as const, lastUpdate: 'Hace 2 minutos' },
@@ -143,18 +157,31 @@ export default function Dashboard() {
     { name: 'Application Load Balancer', status: 'online' as const, lastUpdate: 'Hace 1 minuto' }
   ]
   
-  // Opcional: Muestra loading si AWS está cargando
-  // if (awsLoading) {
-  //   return (
-  //     <div className="min-h-screen flex items-center justify-center">
-  //       <div className="text-center">
-  //         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
-  //         <h2 className="mt-4 text-xl font-semibold text-gray-700">Cargando Dashboard...</h2>
-  //         <p className="mt-2 text-gray-500">Conectando con servicios AWS</p>
-  //       </div>
-  //     </div>
-  //   )
-  // }
+  // Muestra loading si AWS está cargando
+  if (awsLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+          <h2 className="mt-4 text-xl font-semibold text-gray-700">Cargando Dashboard...</h2>
+          <p className="mt-2 text-gray-500">Conectando con servicios AWS</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Muestra error si hay problemas con AWS
+  if (awsError) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-semibold text-red-600 mb-4">Error de Conexión AWS</h2>
+          <p className="text-gray-600 mb-4">{awsError}</p>
+          <p className="text-sm text-gray-500">Verifica las variables de entorno en Vercel</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
@@ -237,9 +264,17 @@ export default function Dashboard() {
                   <span className="text-sm font-medium text-gray-700">Sistema Activo</span>
                 </div>
                 <div className="flex items-center space-x-2 bg-white/50 px-4 py-2 rounded-full shadow-lg">
-                  <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
-                  <span className="text-sm font-medium text-gray-700">AWS Conectado</span>
+                  <div className={`w-3 h-3 rounded-full animate-pulse ${awsData ? 'bg-green-500' : 'bg-yellow-500'}`}></div>
+                  <span className="text-sm font-medium text-gray-700">
+                    {awsData ? 'AWS Conectado' : 'AWS Desconectado'}
+                  </span>
                 </div>
+                {awsData && (
+                  <div className="flex items-center space-x-2 bg-green-100 px-4 py-2 rounded-full shadow-lg">
+                    <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                    <span className="text-sm font-medium text-green-700">Datos en Tiempo Real</span>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -371,6 +406,9 @@ export default function Dashboard() {
                 Métricas detalladas y análisis de patrones de seguridad
               </p>
             </div>
+
+            {/* AWS Status Debug */}
+            <AWSStatus data={awsData} loading={awsLoading} error={awsError} />
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="card slide-up">
