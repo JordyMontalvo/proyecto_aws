@@ -128,3 +128,4 @@ Asegúrate de tener estas políticas:
 
 La implementación con SDK v3 es más robusta y tiene mejor compatibilidad con las credenciales modernas de AWS. El sistema de fallback garantiza que el dashboard siempre funcione, independientemente de qué SDK esté disponible.
 
+

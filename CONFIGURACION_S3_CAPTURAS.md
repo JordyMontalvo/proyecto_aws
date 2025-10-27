@@ -188,3 +188,4 @@ Una vez configurado correctamente:
 - ✅ **Integración completa** con tu sistema de vigilancia
 
 **¡Con esta configuración podrás subir todas las capturas de tu cámara directamente a S3!** 🎉
+

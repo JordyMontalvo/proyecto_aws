@@ -139,3 +139,4 @@ Deberías ver ahora:
 
 Los recursos estaban funcionando correctamente, solo necesitaban la configuración correcta en el código para ser detectados.
 
+

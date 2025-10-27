@@ -113,3 +113,4 @@ S3_BUCKET_NAME=vigila-videos-912235389798
 
 El dashboard ahora tiene un sistema robusto que garantiza que siempre funcione, independientemente de qué APIs estén disponibles. El sistema de fallback asegura que siempre tengas datos para mostrar.
 
+

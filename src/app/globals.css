@@ -593,7 +593,6 @@ body {
 /* Dark Mode Support */
 @media (prefers-color-scheme: dark) {
   .card {
-    background: rgba(0, 0, 0, 0.2);
     border-color: rgba(255, 255, 255, 0.1);
   }
   

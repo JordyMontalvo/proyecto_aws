@@ -125,3 +125,4 @@ Si ves:
 
 **¿Necesitas ayuda?** Revisa los logs en Vercel Dashboard o contacta para soporte técnico.
 
+

@@ -159,3 +159,4 @@ Para usar S3 real, simplemente configura las credenciales AWS y el sistema autom
 ## 🎉 ¡Listo para Usar!
 
 El sistema está completamente funcional y listo para usar. No requiere configuración adicional para funcionar en modo demo.
+

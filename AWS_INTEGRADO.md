@@ -115,3 +115,4 @@ Visita: `https://tu-proyecto.vercel.app/api/system-status`
 
 Ahora tu dashboard mostrará datos reales de tu infraestructura AWS desplegada con Terraform.
 
+

@@ -98,3 +98,4 @@ El dashboard ahora funciona de manera **suave y profesional**:
 - **Control manual** cuando sea necesario
 
 **¡La experiencia del usuario está significativamente mejorada!** 🚀
+

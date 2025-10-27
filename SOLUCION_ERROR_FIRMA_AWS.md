@@ -126,3 +126,4 @@ En el componente de debug verás:
 
 **¡Con estos pasos el error debería resolverse!** 🎉
 
+

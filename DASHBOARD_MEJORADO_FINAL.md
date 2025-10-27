@@ -150,3 +150,4 @@ S3_BUCKET_NAME=vigila-videos-912235389798
 
 Todas las funcionalidades están implementadas y el sistema muestra datos reales de tu infraestructura desplegada con Terraform.
 
+

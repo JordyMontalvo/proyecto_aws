@@ -173,3 +173,4 @@ Después de la configuración correcta:
 - Usar **Vercel Preview URLs** para compartir
 - Configurar **dominio personalizado** público
 - Revisar **configuraciones de equipo** en Vercel
+

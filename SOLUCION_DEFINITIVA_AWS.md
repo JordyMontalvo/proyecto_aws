@@ -132,3 +132,4 @@ Asegúrate de tener estas políticas:
 
 La implementación con SDK v3 es más robusta y tiene mejor compatibilidad con las credenciales modernas de AWS.
 
+

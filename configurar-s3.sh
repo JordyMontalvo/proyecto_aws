@@ -83,3 +83,4 @@ echo "   ✅ Capturas se suben automáticamente a S3"
 echo "   ✅ URLs públicas para acceso a archivos"
 echo "   ✅ Almacenamiento persistente"
 echo "   ✅ Integración completa con vigilancia"
+

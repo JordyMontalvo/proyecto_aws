@@ -153,3 +153,4 @@ S3_BUCKET_NAME=vigila-videos-912235389798
 
 El dashboard ahora es completamente robusto y maneja todos los casos edge sin errores. El tab análisis funciona perfectamente tanto con datos reales de AWS como sin ellos.
 
+

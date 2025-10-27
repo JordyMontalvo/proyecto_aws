@@ -95,3 +95,4 @@ S3_BUCKET_NAME=vigila-videos-912235389798
 
 Sigue los pasos de verificación y el dashboard debería conectarse correctamente a AWS.
 
+
