@@ -31,6 +31,8 @@ export default function RealCameraCapture({ onCapture }: RealCameraCaptureProps)
   const [recording, setRecording] = useState(false)
   const [stream, setStream] = useState<MediaStream | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [uploading, setUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(0)
   const [cameraSettings, setCameraSettings] = useState({
     resolution: '1280x720',
     quality: 0.8,
@@ -122,8 +124,11 @@ export default function RealCameraCapture({ onCapture }: RealCameraCaptureProps)
         type: 'image'
       }
 
-      // Enviar a la API para almacenamiento en RDS
+      // Subir a S3
       try {
+        setUploading(true)
+        setUploadProgress(0)
+        
         const formData = new FormData()
         formData.append('file', blob, `capture_${captureData.id}.jpg`)
         formData.append('type', 'image')
@@ -133,17 +138,32 @@ export default function RealCameraCapture({ onCapture }: RealCameraCaptureProps)
           facingMode: cameraSettings.facingMode
         }))
 
-        const response = await fetch('/api/real-camera-capture', {
+        // Simular progreso de subida
+        const progressInterval = setInterval(() => {
+          setUploadProgress(prev => Math.min(prev + 10, 90))
+        }, 200)
+
+        const response = await fetch('/api/s3-upload', {
           method: 'POST',
           body: formData
         })
 
+        clearInterval(progressInterval)
+        setUploadProgress(100)
+
         const result = await response.json()
         if (result.success) {
-          console.log('Captura enviada a RDS:', result.message)
+          // Actualizar la captura con la URL de S3
+          captureData.imageUrl = result.data.fileUrl
+          captureData.status = 'uploaded_to_s3'
+          console.log('Captura subida a S3:', result.message)
         }
       } catch (apiError) {
-        console.warn('Error enviando a API (captura guardada localmente):', apiError)
+        console.warn('Error subiendo a S3 (captura guardada localmente):', apiError)
+        captureData.status = 'local_only'
+      } finally {
+        setUploading(false)
+        setUploadProgress(0)
       }
 
       // Agregar a la lista de capturas
@@ -151,7 +171,7 @@ export default function RealCameraCapture({ onCapture }: RealCameraCaptureProps)
       onCapture?.(captureData)
 
       // Mostrar notificación
-      showNotification('¡Imagen capturada y almacenada!', 'success')
+      showNotification('¡Imagen capturada y subida a S3!', 'success')
 
     } catch (err) {
       console.error('Error capturing image:', err)
@@ -199,8 +219,11 @@ export default function RealCameraCapture({ onCapture }: RealCameraCaptureProps)
           type: 'video'
         }
 
-        // Enviar video a la API para almacenamiento en RDS
+        // Subir video a S3
         try {
+          setUploading(true)
+          setUploadProgress(0)
+          
           const formData = new FormData()
           formData.append('file', blob, `video_${captureData.id}.webm`)
           formData.append('type', 'video')
@@ -210,22 +233,38 @@ export default function RealCameraCapture({ onCapture }: RealCameraCaptureProps)
             facingMode: cameraSettings.facingMode
           }))
 
-          const response = await fetch('/api/real-camera-capture', {
+          // Simular progreso de subida
+          const progressInterval = setInterval(() => {
+            setUploadProgress(prev => Math.min(prev + 5, 90))
+          }, 300)
+
+          const response = await fetch('/api/s3-upload', {
             method: 'POST',
             body: formData
           })
 
+          clearInterval(progressInterval)
+          setUploadProgress(100)
+
           const result = await response.json()
           if (result.success) {
-            console.log('Video enviado a RDS:', result.message)
+            // Actualizar la captura con la URL de S3
+            captureData.imageUrl = result.data.fileUrl
+            captureData.videoUrl = result.data.fileUrl
+            captureData.status = 'uploaded_to_s3'
+            console.log('Video subido a S3:', result.message)
           }
         } catch (apiError) {
-          console.warn('Error enviando video a API (video guardado localmente):', apiError)
+          console.warn('Error subiendo video a S3 (video guardado localmente):', apiError)
+          captureData.status = 'local_only'
+        } finally {
+          setUploading(false)
+          setUploadProgress(0)
         }
 
         setCaptures(prev => [captureData, ...prev])
         onCapture?.(captureData)
-        showNotification('¡Video grabado y almacenado!', 'success')
+        showNotification('¡Video grabado y subido a S3!', 'success')
       }
 
       mediaRecorder.start()
@@ -387,8 +426,24 @@ export default function RealCameraCapture({ onCapture }: RealCameraCaptureProps)
         </div>
         
         <p className="text-sm text-slate-600 mt-2">
-          Las capturas se almacenan localmente y pueden ser enviadas al sistema de vigilancia
+          Las capturas se suben automáticamente a Amazon S3 para almacenamiento seguro
         </p>
+        
+        {/* Indicador de progreso de subida */}
+        {uploading && (
+          <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-blue-700">Subiendo a S3...</span>
+              <span className="text-sm text-blue-600">{uploadProgress}%</span>
+            </div>
+            <div className="w-full bg-blue-200 rounded-full h-2">
+              <div 
+                className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                style={{ width: `${uploadProgress}%` }}
+              ></div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Lista de capturas */}
@@ -430,6 +485,13 @@ export default function RealCameraCapture({ onCapture }: RealCameraCaptureProps)
                   <div className="absolute top-2 left-2 bg-blue-500 text-white px-2 py-1 rounded text-xs">
                     {capture.type === 'video' ? 'VIDEO' : 'IMAGEN'}
                   </div>
+                  <div className={`absolute bottom-2 left-2 px-2 py-1 rounded text-xs ${
+                    capture.status === 'uploaded_to_s3' 
+                      ? 'bg-green-500 text-white' 
+                      : 'bg-yellow-500 text-white'
+                  }`}>
+                    {capture.status === 'uploaded_to_s3' ? 'S3' : 'LOCAL'}
+                  </div>
                 </div>
                 
                 <div className="p-4">
@@ -454,6 +516,15 @@ export default function RealCameraCapture({ onCapture }: RealCameraCaptureProps)
                     <div className="flex items-center">
                       <Database className="h-3 w-3 mr-1" />
                       <span className="text-xs">Formato: {capture.format}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <span className={`text-xs px-2 py-1 rounded ${
+                        capture.status === 'uploaded_to_s3' 
+                          ? 'bg-green-100 text-green-700' 
+                          : 'bg-yellow-100 text-yellow-700'
+                      }`}>
+                        {capture.status === 'uploaded_to_s3' ? '✓ Almacenado en S3' : '⚠ Solo local'}
+                      </span>
                     </div>
                   </div>
                   
