@@ -157,59 +157,61 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+      {/* Background Pattern */}
+      <div className="fixed inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%239C92AC" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
+      
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-sm shadow-lg border-b border-white/20 sticky top-0 z-50">
+      <header className="header-glass">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div className="flex items-center space-x-3">
-              <div className="p-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg glow-effect">
-                <Shield className="h-6 w-6 text-white" />
+          <div className="flex justify-between items-center py-8">
+            <div className="flex items-center space-x-4">
+              <div className="relative">
+                <div className="p-4 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 rounded-2xl shadow-xl glow-effect transform rotate-3 hover:rotate-0 transition-transform duration-300">
+                  <Shield className="h-8 w-8 text-white" />
+                </div>
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full animate-pulse"></div>
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">VIGILA</h1>
-                <p className="text-sm text-gray-500">Sistema de Vigilancia Inteligente</p>
+                <h1 className="text-4xl font-bold text-gradient">VIGILA</h1>
+                <p className="text-lg text-gray-600 font-medium">Sistema de Vigilancia Inteligente</p>
               </div>
             </div>
             <div className="text-right">
-              <p className="text-sm text-gray-500">Tiempo actual</p>
-              <p className="text-lg font-mono font-semibold text-gray-900">{currentTime}</p>
+              <p className="text-sm text-gray-500 font-medium">Tiempo actual</p>
+              <p className="text-2xl font-mono font-bold text-gray-900 bg-white/50 px-4 py-2 rounded-xl shadow-lg">
+                {currentTime}
+              </p>
             </div>
           </div>
           
           {/* Navigation Tabs */}
-          <div className="flex space-x-1 mb-6">
+          <div className="flex space-x-2 mb-8">
             <button
               onClick={() => setActiveTab('overview')}
-              className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
-                activeTab === 'overview'
-                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+              className={`nav-tab ${
+                activeTab === 'overview' ? 'nav-tab-active' : 'nav-tab-inactive'
               }`}
             >
-              <BarChart3 className="h-4 w-4 mr-2 inline" />
+              <BarChart3 className="h-5 w-5 mr-2 inline" />
               Resumen
             </button>
             <button
               onClick={() => setActiveTab('cameras')}
-              className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
-                activeTab === 'cameras'
-                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+              className={`nav-tab ${
+                activeTab === 'cameras' ? 'nav-tab-active' : 'nav-tab-inactive'
               }`}
             >
-              <Eye className="h-4 w-4 mr-2 inline" />
+              <Eye className="h-5 w-5 mr-2 inline" />
               Cámaras
             </button>
             <button
               onClick={() => setActiveTab('analytics')}
-              className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
-                activeTab === 'analytics'
-                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+              className={`nav-tab ${
+                activeTab === 'analytics' ? 'nav-tab-active' : 'nav-tab-inactive'
               }`}
             >
-              <Zap className="h-4 w-4 mr-2 inline" />
+              <Zap className="h-5 w-5 mr-2 inline" />
               Análisis
             </button>
           </div>
@@ -222,113 +224,136 @@ export default function Dashboard() {
         {activeTab === 'overview' && (
           <>
             {/* Welcome Section */}
-            <div className="mb-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">
+            <div className="mb-12 text-center">
+              <h2 className="text-5xl font-bold text-gradient mb-4 fade-in">
                 Dashboard de Monitoreo
               </h2>
-              <p className="text-gray-600">
+              <p className="text-xl text-gray-600 font-medium max-w-3xl mx-auto slide-up">
                 Monitoreo en tiempo real del sistema de vigilancia desplegado en AWS
               </p>
-            </div>
-
-        {/* Metrics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {metrics.map((metric, index) => (
-            <MetricCard
-              key={index}
-              title={metric.title}
-              value={metric.value}
-              icon={metric.icon}
-              trend={metric.trend}
-              status={metric.status}
-            />
-          ))}
-        </div>
-
-        {/* Services Status */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-              <Server className="h-5 w-5 mr-2 text-blue-600" />
-              Estado de Servicios AWS
-            </h3>
-            <div className="space-y-3">
-              {services.map((service, index) => (
-                <ServiceStatus
-                  key={index}
-                  name={service.name}
-                  status={service.status}
-                  lastUpdate={service.lastUpdate}
-                />
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-              <TrendingUp className="h-5 w-5 mr-2 text-blue-600" />
-              Resumen del Sistema
-            </h3>
-            <div className="card">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Infraestructura AWS</span>
-                  <span className="status-online">Operativa</span>
+              <div className="mt-6 flex justify-center space-x-4">
+                <div className="flex items-center space-x-2 bg-white/50 px-4 py-2 rounded-full shadow-lg">
+                  <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                  <span className="text-sm font-medium text-gray-700">Sistema Activo</span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Región</span>
-                  <span className="font-medium">us-east-1 (N. Virginia)</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Tipo de Instancia</span>
-                  <span className="font-medium">t3.micro (Free Tier)</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Base de Datos</span>
-                  <span className="font-medium">PostgreSQL 15.7</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Almacenamiento</span>
-                  <span className="font-medium">S3 + RDS (20GB)</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Monitoreo</span>
-                  <span className="font-medium">CloudWatch Activo</span>
+                <div className="flex items-center space-x-2 bg-white/50 px-4 py-2 rounded-full shadow-lg">
+                  <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
+                  <span className="text-sm font-medium text-gray-700">AWS Conectado</span>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* AWS Architecture Info */}
-        <div className="mt-8 card">
-          <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-            <Cloud className="h-5 w-5 mr-2 text-blue-600" />
-            Arquitectura AWS Desplegada
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <Server className="h-8 w-8 mx-auto text-blue-600 mb-2" />
-              <h4 className="font-medium text-gray-900">EC2</h4>
-              <p className="text-sm text-gray-500">Servidores de aplicación</p>
+            {/* Metrics Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+              {metrics.map((metric, index) => (
+                <div key={index} className="slide-up" style={{ animationDelay: `${index * 100}ms` }}>
+                  <MetricCard
+                    title={metric.title}
+                    value={metric.value}
+                    icon={metric.icon}
+                    trend={metric.trend}
+                    status={metric.status}
+                    color={metric.color}
+                  />
+                </div>
+              ))}
             </div>
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <Database className="h-8 w-8 mx-auto text-blue-600 mb-2" />
-              <h4 className="font-medium text-gray-900">RDS</h4>
-              <p className="text-sm text-gray-500">Base de datos PostgreSQL</p>
+
+            {/* Services Status */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+              <div className="card slide-up">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                  <Server className="h-6 w-6 mr-3 text-blue-600" />
+                  Estado de Servicios AWS
+                </h3>
+                <div className="space-y-4">
+                  {services.map((service, index) => (
+                    <div key={index} className="slide-up" style={{ animationDelay: `${index * 100}ms` }}>
+                      <ServiceStatus
+                        name={service.name}
+                        status={service.status}
+                        lastUpdate={service.lastUpdate}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="card slide-up">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                  <TrendingUp className="h-6 w-6 mr-3 text-blue-600" />
+                  Resumen del Sistema
+                </h3>
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-200">
+                    <span className="text-gray-700 font-medium">Infraestructura AWS</span>
+                    <span className="status-online">Operativa</span>
+                  </div>
+                  <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200">
+                    <span className="text-gray-700 font-medium">Región</span>
+                    <span className="font-semibold text-blue-700">us-east-1 (N. Virginia)</span>
+                  </div>
+                  <div className="flex items-center justify-between p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border border-purple-200">
+                    <span className="text-gray-700 font-medium">Tipo de Instancia</span>
+                    <span className="font-semibold text-purple-700">t3.micro (Free Tier)</span>
+                  </div>
+                  <div className="flex items-center justify-between p-4 bg-gradient-to-r from-yellow-50 to-amber-50 rounded-xl border border-yellow-200">
+                    <span className="text-gray-700 font-medium">Base de Datos</span>
+                    <span className="font-semibold text-yellow-700">PostgreSQL 15.7</span>
+                  </div>
+                  <div className="flex items-center justify-between p-4 bg-gradient-to-r from-teal-50 to-cyan-50 rounded-xl border border-teal-200">
+                    <span className="text-gray-700 font-medium">Almacenamiento</span>
+                    <span className="font-semibold text-teal-700">S3 + RDS (20GB)</span>
+                  </div>
+                  <div className="flex items-center justify-between p-4 bg-gradient-to-r from-orange-50 to-red-50 rounded-xl border border-orange-200">
+                    <span className="text-gray-700 font-medium">Monitoreo</span>
+                    <span className="font-semibold text-orange-700">CloudWatch Activo</span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <Cloud className="h-8 w-8 mx-auto text-blue-600 mb-2" />
-              <h4 className="font-medium text-gray-900">S3</h4>
-              <p className="text-sm text-gray-500">Almacenamiento de videos</p>
+
+            {/* AWS Architecture Info */}
+            <div className="card slide-up">
+              <h3 className="text-3xl font-bold text-gray-900 mb-8 flex items-center justify-center">
+                <Cloud className="h-8 w-8 mr-3 text-blue-600" />
+                Arquitectura AWS Desplegada
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                  <div className="p-4 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl mx-auto mb-4 w-fit">
+                    <Server className="h-8 w-8 text-white" />
+                  </div>
+                  <h4 className="font-bold text-gray-900 text-lg mb-2">EC2</h4>
+                  <p className="text-sm text-gray-600">Servidores de aplicación</p>
+                  <div className="mt-3 text-xs text-blue-600 font-semibold">t3.micro</div>
+                </div>
+                <div className="text-center p-6 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl border border-green-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                  <div className="p-4 bg-gradient-to-r from-green-500 to-green-600 rounded-xl mx-auto mb-4 w-fit">
+                    <Database className="h-8 w-8 text-white" />
+                  </div>
+                  <h4 className="font-bold text-gray-900 text-lg mb-2">RDS</h4>
+                  <p className="text-sm text-gray-600">Base de datos PostgreSQL</p>
+                  <div className="mt-3 text-xs text-green-600 font-semibold">PostgreSQL 15.7</div>
+                </div>
+                <div className="text-center p-6 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl border border-purple-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                  <div className="p-4 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl mx-auto mb-4 w-fit">
+                    <Cloud className="h-8 w-8 text-white" />
+                  </div>
+                  <h4 className="font-bold text-gray-900 text-lg mb-2">S3</h4>
+                  <p className="text-sm text-gray-600">Almacenamiento de videos</p>
+                  <div className="mt-3 text-xs text-purple-600 font-semibold">20GB</div>
+                </div>
+                <div className="text-center p-6 bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl border border-orange-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                  <div className="p-4 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl mx-auto mb-4 w-fit">
+                    <Activity className="h-8 w-8 text-white" />
+                  </div>
+                  <h4 className="font-bold text-gray-900 text-lg mb-2">CloudWatch</h4>
+                  <p className="text-sm text-gray-600">Monitoreo y alertas</p>
+                  <div className="mt-3 text-xs text-orange-600 font-semibold">Activo</div>
+                </div>
+              </div>
             </div>
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <Activity className="h-8 w-8 mx-auto text-blue-600 mb-2" />
-              <h4 className="font-medium text-gray-900">CloudWatch</h4>
-              <p className="text-sm text-gray-500">Monitoreo y alertas</p>
-            </div>
-          </div>
-        </div>
           </>
         )}
 
@@ -337,63 +362,63 @@ export default function Dashboard() {
         )}
 
         {activeTab === 'analytics' && (
-          <div className="space-y-6">
-            <div className="mb-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">
+          <div className="space-y-8">
+            <div className="mb-12 text-center">
+              <h2 className="text-5xl font-bold text-gradient mb-4 fade-in">
                 Análisis Avanzado
               </h2>
-              <p className="text-gray-600">
+              <p className="text-xl text-gray-600 font-medium max-w-3xl mx-auto slide-up">
                 Métricas detalladas y análisis de patrones de seguridad
               </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="card">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-                  <TrendingUp className="h-5 w-5 mr-2 text-blue-600" />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="card slide-up">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                  <TrendingUp className="h-6 w-6 mr-3 text-blue-600" />
                   Tendencias de Seguridad
                 </h3>
                 <div className="space-y-4">
-                  <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
-                    <span className="text-gray-700">Alertas esta semana</span>
-                    <span className="text-green-600 font-semibold">-15%</span>
+                  <div className="flex justify-between items-center p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-200 hover:shadow-lg transition-all duration-300">
+                    <span className="text-gray-700 font-medium">Alertas esta semana</span>
+                    <span className="text-green-600 font-bold text-lg">-15%</span>
                   </div>
-                  <div className="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
-                    <span className="text-gray-700">Cobertura de cámaras</span>
-                    <span className="text-blue-600 font-semibold">100%</span>
+                  <div className="flex justify-between items-center p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200 hover:shadow-lg transition-all duration-300">
+                    <span className="text-gray-700 font-medium">Cobertura de cámaras</span>
+                    <span className="text-blue-600 font-bold text-lg">100%</span>
                   </div>
-                  <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg">
-                    <span className="text-gray-700">Tiempo de respuesta</span>
-                    <span className="text-purple-600 font-semibold">45ms</span>
+                  <div className="flex justify-between items-center p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border border-purple-200 hover:shadow-lg transition-all duration-300">
+                    <span className="text-gray-700 font-medium">Tiempo de respuesta</span>
+                    <span className="text-purple-600 font-bold text-lg">45ms</span>
                   </div>
                 </div>
               </div>
 
-              <div className="card">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-                  <Activity className="h-5 w-5 mr-2 text-blue-600" />
+              <div className="card slide-up">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                  <Activity className="h-6 w-6 mr-3 text-blue-600" />
                   Actividad Reciente
                 </h3>
-                <div className="space-y-3">
-                  <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-200 hover:shadow-lg transition-all duration-300">
+                    <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium">Cámara Principal activada</p>
-                      <p className="text-xs text-gray-500">Hace 2 minutos</p>
+                      <p className="font-medium text-gray-900">Cámara Principal activada</p>
+                      <p className="text-sm text-gray-500">Hace 2 minutos</p>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                    <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                  <div className="flex items-center space-x-4 p-4 bg-gradient-to-r from-yellow-50 to-amber-50 rounded-xl border border-yellow-200 hover:shadow-lg transition-all duration-300">
+                    <div className="w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium">Alerta de movimiento detectada</p>
-                      <p className="text-xs text-gray-500">Hace 5 minutos</p>
+                      <p className="font-medium text-gray-900">Alerta de movimiento detectada</p>
+                      <p className="text-sm text-gray-500">Hace 5 minutos</p>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <div className="flex items-center space-x-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200 hover:shadow-lg transition-all duration-300">
+                    <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium">Sistema actualizado</p>
-                      <p className="text-xs text-gray-500">Hace 1 hora</p>
+                      <p className="font-medium text-gray-900">Sistema actualizado</p>
+                      <p className="text-sm text-gray-500">Hace 1 hora</p>
                     </div>
                   </div>
                 </div>
