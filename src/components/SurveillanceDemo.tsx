@@ -12,7 +12,7 @@ interface CameraFeed {
   isRecording: boolean
 }
 
-export default function SurveillanceDemo() {
+function SurveillanceDemo() {
   const [cameras, setCameras] = useState<CameraFeed[]>([
     {
       id: 'cam_1',
@@ -338,3 +338,5 @@ export default function SurveillanceDemo() {
     </div>
   )
 }
+
+export default SurveillanceDemo

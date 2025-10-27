@@ -14,7 +14,7 @@ interface S3Info {
   simulated?: boolean
 }
 
-export default function S3StorageInfo() {
+function S3StorageInfo() {
   const [s3Info, setS3Info] = useState<S3Info | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -225,3 +225,5 @@ export default function S3StorageInfo() {
     </div>
   )
 }
+
+export default S3StorageInfo

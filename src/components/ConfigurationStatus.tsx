@@ -18,7 +18,7 @@ interface ConfigStatus {
   region: boolean
 }
 
-export default function ConfigurationStatus() {
+function ConfigurationStatus() {
   const [configStatus, setConfigStatus] = useState<ConfigStatus>({
     awsCredentials: false,
     s3Bucket: false,
@@ -224,3 +224,5 @@ export default function ConfigurationStatus() {
     </div>
   )
 }
+
+export default ConfigurationStatus

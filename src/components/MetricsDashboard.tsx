@@ -28,7 +28,7 @@ interface MetricData {
   trend: number[]
 }
 
-export default function MetricsDashboard() {
+function MetricsDashboard() {
   const [metrics, setMetrics] = useState<MetricData[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -303,3 +303,5 @@ export default function MetricsDashboard() {
     </div>
   )
 }
+
+export default MetricsDashboard

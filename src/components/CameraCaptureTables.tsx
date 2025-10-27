@@ -30,7 +30,7 @@ interface CaptureData {
   thumbnail?: string
 }
 
-export default function CameraCaptureTables() {
+function CameraCaptureTables() {
   const [captures, setCaptures] = useState<CaptureData[]>([])
   const [loading, setLoading] = useState(false)
 
@@ -310,3 +310,5 @@ export default function CameraCaptureTables() {
     </div>
   )
 }
+
+export default CameraCaptureTables

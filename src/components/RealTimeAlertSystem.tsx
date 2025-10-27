@@ -57,7 +57,7 @@ interface AlertSettings {
   }
 }
 
-export default function RealTimeAlertSystem() {
+function RealTimeAlertSystem() {
   const [alerts, setAlerts] = useState<Alert[]>([])
   const [activeAlerts, setActiveAlerts] = useState<Alert[]>([])
   const [settings, setSettings] = useState<AlertSettings>({
@@ -544,3 +544,5 @@ export default function RealTimeAlertSystem() {
     </div>
   )
 }
+
+export default RealTimeAlertSystem

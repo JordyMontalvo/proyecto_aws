@@ -53,7 +53,7 @@ interface S3Bucket {
   publicAccess: boolean
 }
 
-export default function AWSDataTables() {
+function AWSDataTables() {
   const [ec2Data, setEc2Data] = useState<EC2Instance[]>([])
   const [rdsData, setRdsData] = useState<RDSInstance[]>([])
   const [s3Data, setS3Data] = useState<S3Bucket[]>([])
@@ -335,3 +335,5 @@ export default function AWSDataTables() {
     </div>
   )
 }
+
+export default AWSDataTables

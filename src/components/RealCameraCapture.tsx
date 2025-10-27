@@ -24,7 +24,7 @@ interface RealCameraCaptureProps {
   onCapture?: (capture: Capture) => void
 }
 
-export default function RealCameraCapture({ onCapture }: RealCameraCaptureProps) {
+function RealCameraCapture({ onCapture }: RealCameraCaptureProps) {
   const [captures, setCaptures] = useState<Capture[]>([])
   const [loading, setLoading] = useState(false)
   const [capturing, setCapturing] = useState(false)
@@ -565,3 +565,5 @@ export default function RealCameraCapture({ onCapture }: RealCameraCaptureProps)
     </div>
   )
 }
+
+export default RealCameraCapture
