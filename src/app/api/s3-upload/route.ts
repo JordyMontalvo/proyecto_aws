@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
-import { getDetailedS3Buckets } from '../../../lib/aws-detailed-service'
+import { getDetailedS3Info } from '../../../lib/aws-detailed-service'
 
 // Configurar cliente S3
 const s3Client = new S3Client({
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Obtener información de buckets S3
-    const s3Info = await getDetailedS3Buckets()
+    const s3Info = await getDetailedS3Info()
     if (s3Info.buckets.length === 0) {
       return NextResponse.json({
         success: false,
@@ -114,7 +114,7 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   try {
     // Obtener información de buckets S3
-    const s3Info = await getDetailedS3Buckets()
+    const s3Info = await getDetailedS3Info()
     if (s3Info.buckets.length === 0) {
       return NextResponse.json({
         success: false,
