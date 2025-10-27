@@ -51,11 +51,14 @@ function ModernMetricCard({
   }
 
   const colorGradients = {
-    blue: 'from-blue-500 to-purple-600',
-    green: 'from-green-500 to-emerald-600',
-    yellow: 'from-yellow-500 to-orange-600',
-    red: 'from-red-500 to-pink-600',
-    purple: 'from-purple-500 to-indigo-600'
+    blue: 'from-cyan-400 to-blue-500',
+    green: 'from-emerald-400 to-teal-500',
+    yellow: 'from-yellow-400 to-orange-500',
+    red: 'from-red-400 to-pink-500',
+    purple: 'from-purple-400 to-indigo-500',
+    teal: 'from-teal-400 to-cyan-500',
+    pink: 'from-pink-400 to-rose-500',
+    orange: 'from-orange-400 to-red-500'
   }
 
   const cardClass = status === 'normal' ? 'metric-card' : 
@@ -171,7 +174,7 @@ export default function Dashboard() {
       icon: Activity,
       trend: finalData.metrics?.cpu?.trend > 0 ? `+${finalData.metrics.cpu.trend.toFixed(1)}%` : undefined,
       status: (finalData.metrics?.cpu?.average || 0) > 80 ? 'critical' : (finalData.metrics?.cpu?.average || 0) > 60 ? 'warning' : 'normal',
-      color: 'blue',
+      color: 'red',
       subtitle: 'Últimos 5 minutos'
     },
     {
@@ -180,7 +183,7 @@ export default function Dashboard() {
       icon: Database,
       trend: finalData.s3?.objectCount ? `${finalData.s3.objectCount} objetos` : undefined,
       status: 'normal',
-      color: 'green',
+      color: 'teal',
       subtitle: 'Total utilizado'
     },
     {
@@ -198,7 +201,7 @@ export default function Dashboard() {
       icon: Database,
       trend: finalData.rds?.totalCount ? `${finalData.rds.totalCount} instancias` : undefined,
       status: (finalData.rds?.availableCount || 0) === 0 ? 'critical' : 'normal',
-      color: 'yellow',
+      color: 'orange',
       subtitle: 'Disponibles'
     }
   ] : []
@@ -214,7 +217,7 @@ export default function Dashboard() {
 
   if (finalLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-800 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-red-400 via-teal-400 via-blue-400 to-yellow-400 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-white/30 border-t-white rounded-full animate-spin mx-auto mb-4"></div>
           <h2 className="text-2xl font-bold text-white mb-2">Cargando Dashboard</h2>
@@ -225,13 +228,13 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-800">
+    <div className="min-h-screen bg-gradient-to-br from-red-400 via-teal-400 via-blue-400 to-yellow-400">
       {/* Header Glassmorphism */}
       <div className="header-glass">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center float-animation">
+              <div className="w-12 h-12 bg-gradient-to-r from-red-500 via-teal-500 to-yellow-500 rounded-xl flex items-center justify-center float-animation">
                 <Eye className="h-6 w-6 text-white" />
               </div>
               <div>
@@ -290,20 +293,20 @@ export default function Dashboard() {
                 Monitoreo en tiempo real del sistema de vigilancia desplegado en AWS
               </p>
               <div className="mt-8 flex justify-center space-x-6">
-                <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-md px-6 py-3 rounded-full border border-white/20">
-                  <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                <div className="flex items-center space-x-2 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 backdrop-blur-md px-6 py-3 rounded-full border border-emerald-400/30">
+                  <div className="w-3 h-3 bg-emerald-400 rounded-full animate-pulse"></div>
                   <span className="text-sm font-medium text-white">Sistema Activo</span>
                 </div>
-                <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-md px-6 py-3 rounded-full border border-white/20">
-                  <div className={`w-3 h-3 rounded-full animate-pulse ${finalData ? 'bg-green-400' : 'bg-yellow-400'}`}></div>
+                <div className="flex items-center space-x-2 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 backdrop-blur-md px-6 py-3 rounded-full border border-blue-400/30">
+                  <div className={`w-3 h-3 rounded-full animate-pulse ${finalData ? 'bg-blue-400' : 'bg-yellow-400'}`}></div>
                   <span className="text-sm font-medium text-white">
                     {finalData ? 'AWS Conectado' : 'AWS Desconectado'}
                   </span>
                 </div>
                 {finalData && (
-                  <div className="flex items-center space-x-2 bg-green-500/20 backdrop-blur-md px-6 py-3 rounded-full border border-green-400/30">
-                    <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                    <span className="text-sm font-medium text-green-100">
+                  <div className="flex items-center space-x-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-md px-6 py-3 rounded-full border border-purple-400/30">
+                    <div className="w-3 h-3 bg-purple-400 rounded-full animate-pulse"></div>
+                    <span className="text-sm font-medium text-purple-100">
                       Datos en Tiempo Real (SDK v3)
                     </span>
                   </div>
@@ -338,8 +341,8 @@ export default function Dashboard() {
 
               <div className="card">
                 <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
-                  <Zap className="h-6 w-6 mr-3 text-yellow-400" />
-                  Control del Sistema
+                  <Shield className="h-6 w-6 mr-3 text-emerald-400" />
+                  Estado de Servicios AWS
                 </h3>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between p-4 bg-white/10 rounded-xl">
@@ -359,7 +362,7 @@ export default function Dashboard() {
                     </button>
                   </div>
                   
-                  <div className="flex items-center justify-between p-4 bg-white/10 rounded-xl">
+                  <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-xl border border-blue-400/20">
                     <div className="flex items-center space-x-3">
                       <RefreshCw className="h-5 w-5 text-blue-400" />
                       <span className="text-white font-medium">Actualización Automática</span>
@@ -367,7 +370,7 @@ export default function Dashboard() {
                     <span className="text-white/80 text-sm">Cada 30 segundos</span>
                   </div>
 
-                  <div className="flex items-center justify-between p-4 bg-white/10 rounded-xl">
+                  <div className="flex items-center justify-between p-4 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-xl border border-purple-400/20">
                     <div className="flex items-center space-x-3">
                       <Clock className="h-5 w-5 text-purple-400" />
                       <span className="text-white font-medium">Última Actualización</span>

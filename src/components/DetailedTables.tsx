@@ -19,75 +19,75 @@ interface EC2TableProps {
 }
 
 export function EC2Table({ data }: EC2TableProps) {
-  const getStateColor = (state: string) => {
+  const getStateBadge = (state: string) => {
     switch (state) {
-      case 'running': return 'text-green-600 bg-green-100'
-      case 'stopped': return 'text-red-600 bg-red-100'
-      case 'terminated': return 'text-gray-600 bg-gray-100'
-      default: return 'text-yellow-600 bg-yellow-100'
+      case 'running': return 'status-badge running'
+      case 'stopped': return 'status-badge stopped'
+      case 'terminated': return 'status-badge offline'
+      default: return 'status-badge warning'
     }
   }
 
   return (
     <div className="card">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-2xl font-bold text-gray-900 flex items-center">
-          <Server className="h-6 w-6 mr-3 text-blue-600" />
+        <h3 className="text-2xl font-bold text-white flex items-center">
+          <Server className="h-6 w-6 mr-3 text-blue-400" />
           Instancias EC2
         </h3>
         <div className="flex space-x-4 text-sm">
           <div className="flex items-center">
-            <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
-            <span>Running: {data.runningCount}</span>
+            <div className="w-3 h-3 bg-green-400 rounded-full mr-2 animate-pulse"></div>
+            <span className="text-white/80">Running: {data.runningCount}</span>
           </div>
           <div className="flex items-center">
-            <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
-            <span>Stopped: {data.stoppedCount}</span>
+            <div className="w-3 h-3 bg-red-400 rounded-full mr-2"></div>
+            <span className="text-white/80">Stopped: {data.stoppedCount}</span>
           </div>
           <div className="flex items-center">
-            <div className="w-3 h-3 bg-gray-500 rounded-full mr-2"></div>
-            <span>Terminated: {data.terminatedCount}</span>
+            <div className="w-3 h-3 bg-gray-400 rounded-full mr-2"></div>
+            <span className="text-white/80">Terminated: {data.terminatedCount}</span>
           </div>
         </div>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full">
+      <div className="modern-table">
+        <table>
           <thead>
-            <tr className="border-b border-gray-200">
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">ID</th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">Nombre</th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">Estado</th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">Tipo</th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">IP Pública</th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">Zona</th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">Lanzamiento</th>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Estado</th>
+              <th>Tipo</th>
+              <th>IP Pública</th>
+              <th>Zona</th>
+              <th>Lanzamiento</th>
             </tr>
           </thead>
           <tbody>
             {data.instances.map((instance) => (
-              <tr key={instance.id} className="border-b border-gray-100 hover:bg-gray-50">
-                <td className="py-3 px-4 font-mono text-sm text-gray-600">
+              <tr key={instance.id}>
+                <td className="font-mono text-sm text-blue-300">
                   {instance.id}
                 </td>
-                <td className="py-3 px-4 font-medium text-gray-900">
+                <td className="font-medium text-white">
                   {instance.name}
                 </td>
-                <td className="py-3 px-4">
-                  <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getStateColor(instance.state)}`}>
+                <td>
+                  <span className={getStateBadge(instance.state)}>
                     {instance.state}
                   </span>
                 </td>
-                <td className="py-3 px-4 text-gray-600">
+                <td className="text-white/80">
                   {instance.type}
                 </td>
-                <td className="py-3 px-4 font-mono text-sm text-gray-600">
+                <td className="font-mono text-sm text-cyan-300">
                   {instance.publicIp || 'N/A'}
                 </td>
-                <td className="py-3 px-4 text-gray-600">
+                <td className="text-white/80">
                   {instance.availabilityZone}
                 </td>
-                <td className="py-3 px-4 text-gray-600">
+                <td className="text-white/80">
                   {new Date(instance.launchTime).toLocaleDateString('es-ES')}
                 </td>
               </tr>
@@ -104,75 +104,75 @@ interface RDSTableProps {
 }
 
 export function RDSTable({ data }: RDSTableProps) {
-  const getStatusColor = (status: string) => {
+  const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'available': return 'text-green-600 bg-green-100'
-      case 'upgrading': return 'text-blue-600 bg-blue-100'
-      case 'stopped': return 'text-red-600 bg-red-100'
-      default: return 'text-yellow-600 bg-yellow-100'
+      case 'available': return 'status-badge available'
+      case 'upgrading': return 'status-badge warning'
+      case 'stopped': return 'status-badge stopped'
+      default: return 'status-badge warning'
     }
   }
 
   return (
     <div className="card">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-2xl font-bold text-gray-900 flex items-center">
-          <Database className="h-6 w-6 mr-3 text-green-600" />
+        <h3 className="text-2xl font-bold text-white flex items-center">
+          <Database className="h-6 w-6 mr-3 text-green-400" />
           Base de Datos RDS
         </h3>
         <div className="flex space-x-4 text-sm">
           <div className="flex items-center">
-            <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
-            <span>Available: {data.availableCount}</span>
+            <div className="w-3 h-3 bg-green-400 rounded-full mr-2 animate-pulse"></div>
+            <span className="text-white/80">Available: {data.availableCount}</span>
           </div>
           <div className="flex items-center">
-            <div className="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
-            <span>Upgrading: {data.upgradingCount}</span>
+            <div className="w-3 h-3 bg-blue-400 rounded-full mr-2"></div>
+            <span className="text-white/80">Upgrading: {data.upgradingCount}</span>
           </div>
           <div className="flex items-center">
-            <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
-            <span>Other: {data.otherStatusCount}</span>
+            <div className="w-3 h-3 bg-yellow-400 rounded-full mr-2"></div>
+            <span className="text-white/80">Other: {data.otherStatusCount}</span>
           </div>
         </div>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full">
+      <div className="modern-table">
+        <table>
           <thead>
-            <tr className="border-b border-gray-200">
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">ID</th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">Estado</th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">Motor</th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">Clase</th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">Almacenamiento</th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">Endpoint</th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">Zona</th>
+            <tr>
+              <th>ID</th>
+              <th>Estado</th>
+              <th>Motor</th>
+              <th>Clase</th>
+              <th>Almacenamiento</th>
+              <th>Endpoint</th>
+              <th>Zona</th>
             </tr>
           </thead>
           <tbody>
             {data.instances.map((instance) => (
-              <tr key={instance.id} className="border-b border-gray-100 hover:bg-gray-50">
-                <td className="py-3 px-4 font-mono text-sm text-gray-600">
+              <tr key={instance.id}>
+                <td className="font-mono text-sm text-green-300">
                   {instance.id}
                 </td>
-                <td className="py-3 px-4">
-                  <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(instance.status)}`}>
+                <td>
+                  <span className={getStatusBadge(instance.status)}>
                     {instance.status}
                   </span>
                 </td>
-                <td className="py-3 px-4 text-gray-600">
+                <td className="text-white/80">
                   {instance.engine} {instance.engineVersion}
                 </td>
-                <td className="py-3 px-4 text-gray-600">
+                <td className="text-white/80">
                   {instance.instanceClass}
                 </td>
-                <td className="py-3 px-4 text-gray-600">
+                <td className="text-white/80">
                   {instance.allocatedStorage} GB ({instance.storageType})
                 </td>
-                <td className="py-3 px-4 font-mono text-sm text-gray-600">
+                <td className="font-mono text-sm text-cyan-300">
                   {instance.endpoint || 'N/A'}
                 </td>
-                <td className="py-3 px-4 text-gray-600">
+                <td className="text-white/80">
                   {instance.availabilityZone}
                 </td>
               </tr>
@@ -192,53 +192,53 @@ export function S3Table({ data }: S3TableProps) {
   return (
     <div className="card">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-2xl font-bold text-gray-900 flex items-center">
-          <HardDrive className="h-6 w-6 mr-3 text-purple-600" />
+        <h3 className="text-2xl font-bold text-white flex items-center">
+          <HardDrive className="h-6 w-6 mr-3 text-purple-400" />
           Almacenamiento S3
         </h3>
         <div className="text-right">
-          <div className="text-2xl font-bold text-gray-900">
+          <div className="text-2xl font-bold text-white">
             {(data.totalSizeGB || 0).toFixed(2)} GB
           </div>
-          <div className="text-sm text-gray-600">
+          <div className="text-sm text-white/80">
             {data.objectCount} objetos
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <div className="bg-gray-50 p-4 rounded-lg">
+        <div className="data-card">
           <div className="flex items-center mb-2">
-            <HardDrive className="h-5 w-5 text-gray-600 mr-2" />
-            <span className="font-semibold text-gray-700">Tamaño Total</span>
+            <HardDrive className="h-5 w-5 text-purple-400 mr-2" />
+            <span className="font-semibold text-white">Tamaño Total</span>
           </div>
-          <div className="text-2xl font-bold text-gray-900">
+          <div className="text-2xl font-bold text-white">
             {(data.totalSizeGB || 0).toFixed(2)} GB
           </div>
-          <div className="text-sm text-gray-600">
+          <div className="text-sm text-white/60">
             {data.totalSizeBytes.toLocaleString()} bytes
           </div>
         </div>
 
-        <div className="bg-gray-50 p-4 rounded-lg">
+        <div className="data-card">
           <div className="flex items-center mb-2">
-            <Activity className="h-5 w-5 text-gray-600 mr-2" />
-            <span className="font-semibold text-gray-700">Objetos</span>
+            <Activity className="h-5 w-5 text-blue-400 mr-2" />
+            <span className="font-semibold text-white">Objetos</span>
           </div>
-          <div className="text-2xl font-bold text-gray-900">
+          <div className="text-2xl font-bold text-white">
             {data.objectCount.toLocaleString()}
           </div>
-          <div className="text-sm text-gray-600">
+          <div className="text-sm text-white/60">
             Promedio: {(data.avgObjectSizeMB || 0).toFixed(2)} MB
           </div>
         </div>
 
-        <div className="bg-gray-50 p-4 rounded-lg">
+        <div className="data-card">
           <div className="flex items-center mb-2">
-            <Clock className="h-5 w-5 text-gray-600 mr-2" />
-            <span className="font-semibold text-gray-700">Última Modificación</span>
+            <Clock className="h-5 w-5 text-green-400 mr-2" />
+            <span className="font-semibold text-white">Última Modificación</span>
           </div>
-          <div className="text-sm font-bold text-gray-900">
+          <div className="text-sm font-bold text-white">
             {data.lastModified ? 
               new Date(data.lastModified).toLocaleString('es-ES') : 
               'N/A'
@@ -249,10 +249,10 @@ export function S3Table({ data }: S3TableProps) {
 
       {/* Tipos de archivo */}
       <div className="mb-6">
-        <h4 className="font-semibold text-gray-700 mb-3">Tipos de Archivo</h4>
+        <h4 className="font-semibold text-white mb-3">Tipos de Archivo</h4>
         <div className="flex flex-wrap gap-2">
           {Object.entries(data.fileTypes).map(([type, count]) => (
-            <div key={type} className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+            <div key={type} className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-200 px-3 py-1 rounded-full text-sm border border-purple-400/30">
               {type}: {count}
             </div>
           ))}
@@ -261,26 +261,26 @@ export function S3Table({ data }: S3TableProps) {
 
       {/* Archivos recientes */}
       <div>
-        <h4 className="font-semibold text-gray-700 mb-3">Archivos Recientes</h4>
-        <div className="overflow-x-auto">
-          <table className="w-full">
+        <h4 className="font-semibold text-white mb-3">Archivos Recientes</h4>
+        <div className="modern-table">
+          <table>
             <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-2 px-3 font-semibold text-gray-700">Archivo</th>
-                <th className="text-left py-2 px-3 font-semibold text-gray-700">Tamaño</th>
-                <th className="text-left py-2 px-3 font-semibold text-gray-700">Modificado</th>
+              <tr>
+                <th>Archivo</th>
+                <th>Tamaño</th>
+                <th>Modificado</th>
               </tr>
             </thead>
             <tbody>
               {data.recentFiles.slice(0, 5).map((file, index) => (
-                <tr key={index} className="border-b border-gray-100">
-                  <td className="py-2 px-3 font-mono text-sm text-gray-600">
+                <tr key={index}>
+                  <td className="font-mono text-sm text-cyan-300">
                     {file.key}
                   </td>
-                  <td className="py-2 px-3 text-gray-600">
+                  <td className="text-white/80">
                     {(file.sizeMB || 0).toFixed(2)} MB
                   </td>
-                  <td className="py-2 px-3 text-gray-600">
+                  <td className="text-white/80">
                     {new Date(file.lastModified).toLocaleString('es-ES')}
                   </td>
                 </tr>
