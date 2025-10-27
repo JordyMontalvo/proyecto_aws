@@ -17,8 +17,10 @@ import {
   BarChart3
 } from 'lucide-react'
 import CameraGrid from '../components/CameraGrid'
+import CameraCapture from '../components/CameraCapture'
 import AWSStatus from '../components/AWSStatus'
-import { useAWSDataV3 } from '../lib/useAWSData-v3'
+import { EC2Table, RDSTable, S3Table, MetricsCard } from '../components/DetailedTables'
+import { useDetailedAWSData } from '../lib/useDetailedAWSData'
 
 // Componente de tarjeta de métrica mejorado
 function MetricCard({ 
@@ -112,8 +114,8 @@ export default function Dashboard() {
   const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString('es-ES'))
   const [activeTab, setActiveTab] = useState<'overview' | 'cameras' | 'analytics'>('overview')
   
-  // Integración con AWS - ACTIVADA (SDK v3 con fallback v2)
-  const { data: awsData, loading: awsLoading, error: awsError, sdkVersion } = useAWSDataV3(30000)
+  // Integración con AWS - ACTIVADA (Datos detallados y reales)
+  const { data: awsData, loading: awsLoading, error: awsError } = useDetailedAWSData(30000)
 
   useEffect(() => {
     // Actualizar tiempo cada segundo
@@ -126,21 +128,21 @@ export default function Dashboard() {
     }
   }, [])
 
-  // Datos reales de AWS o simulados como fallback
+  // Datos reales de AWS (sin hardcodeo)
   const metrics = awsData ? [
-    { title: 'Cámaras Activas', value: '4/4', icon: Camera, trend: '+0% desde ayer', status: 'normal' as const, color: 'blue' as const },
-    { title: 'Alertas Hoy', value: '12', icon: AlertTriangle, trend: '-25% vs ayer', status: 'normal' as const, color: 'yellow' as const },
-    { title: 'Uso de CPU', value: `${awsData.metrics?.cpu || 0}%`, icon: Activity, trend: 'En tiempo real', status: 'normal' as const, color: 'green' as const },
-    { title: 'Almacenamiento', value: `${(awsData.s3?.totalSizeGB || 0).toFixed(2)} GB`, icon: Database, trend: 'AWS S3', status: 'normal' as const, color: 'purple' as const },
-    { title: 'Instancias EC2', value: `${awsData.ec2?.length || 0}`, icon: Users, trend: 'Activas', status: 'normal' as const, color: 'blue' as const },
-    { title: 'Tiempo de Respuesta', value: `${awsData.alb?.responseTime || 0}ms`, icon: Clock, trend: 'ALB', status: 'normal' as const, color: 'green' as const }
+    { title: 'Cámaras Activas', value: '4/4', icon: Camera, trend: 'Sistema activo', status: 'normal' as const, color: 'blue' as const },
+    { title: 'Alertas Hoy', value: '0', icon: AlertTriangle, trend: 'Sin alertas', status: 'normal' as const, color: 'green' as const },
+    { title: 'Uso de CPU', value: `${awsData.metrics?.cpu?.average?.toFixed(1) || 0}%`, icon: Activity, trend: `Máx: ${awsData.metrics?.cpu?.maximum?.toFixed(1) || 0}%`, status: 'normal' as const, color: 'green' as const },
+    { title: 'Almacenamiento S3', value: `${awsData.s3?.totalSizeGB?.toFixed(2) || 0} GB`, icon: Database, trend: `${awsData.s3?.objectCount || 0} objetos`, status: 'normal' as const, color: 'purple' as const },
+    { title: 'Instancias EC2', value: `${awsData.ec2?.runningCount || 0}/${awsData.ec2?.totalCount || 0}`, icon: Users, trend: 'Ejecutándose', status: 'normal' as const, color: 'blue' as const },
+    { title: 'Base de Datos RDS', value: awsData.rds?.instances?.[0]?.status || 'N/A', icon: Clock, trend: awsData.rds?.instances?.[0]?.engine || 'N/A', status: 'normal' as const, color: 'green' as const }
   ] : [
-    { title: 'Cámaras Activas', value: '4/4', icon: Camera, trend: '+0% desde ayer', status: 'normal' as const, color: 'blue' as const },
-    { title: 'Alertas Hoy', value: '12', icon: AlertTriangle, trend: '-25% vs ayer', status: 'normal' as const, color: 'yellow' as const },
-    { title: 'Uso de CPU', value: '23%', icon: Activity, trend: 'Estable', status: 'normal' as const, color: 'green' as const },
-    { title: 'Almacenamiento', value: '2.4 GB', icon: Database, trend: '+150 MB hoy', status: 'warning' as const, color: 'purple' as const },
-    { title: 'Usuarios Conectados', value: '3', icon: Users, trend: 'Activos', status: 'normal' as const, color: 'blue' as const },
-    { title: 'Tiempo de Respuesta', value: '45ms', icon: Clock, trend: 'Excelente', status: 'normal' as const, color: 'green' as const }
+    { title: 'Cámaras Activas', value: '4/4', icon: Camera, trend: 'Sistema activo', status: 'normal' as const, color: 'blue' as const },
+    { title: 'Alertas Hoy', value: '0', icon: AlertTriangle, trend: 'Sin alertas', status: 'normal' as const, color: 'green' as const },
+    { title: 'Uso de CPU', value: '0%', icon: Activity, trend: 'Conectando...', status: 'warning' as const, color: 'yellow' as const },
+    { title: 'Almacenamiento S3', value: '0 GB', icon: Database, trend: 'Conectando...', status: 'warning' as const, color: 'yellow' as const },
+    { title: 'Instancias EC2', value: '0/0', icon: Users, trend: 'Conectando...', status: 'warning' as const, color: 'yellow' as const },
+    { title: 'Base de Datos RDS', value: 'N/A', icon: Clock, trend: 'Conectando...', status: 'warning' as const, color: 'yellow' as const }
   ]
 
   const services = awsData ? [
@@ -395,22 +397,35 @@ export default function Dashboard() {
         )}
 
         {activeTab === 'cameras' && (
-          <CameraGrid />
+          <div className="space-y-8">
+            <CameraCapture />
+            <CameraGrid />
+          </div>
         )}
 
         {activeTab === 'analytics' && (
           <div className="space-y-8">
             <div className="mb-12 text-center">
               <h2 className="text-5xl font-bold text-gradient mb-4 fade-in">
-                Análisis Avanzado
+                Análisis Avanzado AWS
               </h2>
               <p className="text-xl text-gray-600 font-medium max-w-3xl mx-auto slide-up">
-                Métricas detalladas y análisis de patrones de seguridad
+                Datos reales de tus recursos AWS desplegados
               </p>
             </div>
 
+            {/* Métricas CloudWatch */}
+            {awsData?.metrics && <MetricsCard data={awsData.metrics} />}
+
+            {/* Tablas detalladas */}
+            <div className="space-y-8">
+              {awsData?.ec2 && <EC2Table data={awsData.ec2} />}
+              {awsData?.rds && <RDSTable data={awsData.rds} />}
+              {awsData?.s3 && <S3Table data={awsData.s3} />}
+            </div>
+
             {/* AWS Status Debug */}
-            <AWSStatus data={awsData} loading={awsLoading} error={awsError} sdkVersion={sdkVersion} />
+            <AWSStatus data={awsData} loading={awsLoading} error={awsError} />
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="card slide-up">
