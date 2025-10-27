@@ -1,0 +1,41 @@
+{
+  "name": "vigila-dashboard",
+  "version": "1.0.0",
+  "description": "Dashboard de Sistema de Vigilancia con AWS",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1692.0",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.400.0",
+    "next": "^16.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "recharts": "^2.15.4",
+    "tailwind-merge": "^2.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.9.1",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.38.0",
+    "eslint-config-next": "^16.0.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.16",
+    "typescript": "^5.9.3"
+  },
+  "keywords": [
+    "vigilancia",
+    "aws",
+    "dashboard",
+    "nextjs"
+  ],
+  "author": "VIGILA Team",
+  "license": "MIT"
+}
