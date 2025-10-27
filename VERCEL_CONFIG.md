@@ -1,7 +1,7 @@
 # 🔧 Configuración Completa para Vercel
 
 ## ✅ Variables Ya Configuradas
-- `S3_BUCKET_NAME`: `vigila-videos-912235389798`
+- `S3_BUCKET_NAME`: `vigila-videos-912235389798-logs`
 - `S3_REGION`: `us-east-1`
 
 ## 🔑 Variables Faltantes (Necesarias)

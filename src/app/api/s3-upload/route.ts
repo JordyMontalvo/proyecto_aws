@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
 
       // Parámetros para S3
       const uploadParams = {
-        Bucket: process.env.S3_BUCKET_NAME || 'vigila-videos-912235389798',
+        Bucket: process.env.S3_BUCKET_NAME || 'vigila-videos-912235389798-logs',
         Key: fileName,
         Body: buffer,
         ContentType: file.type,
@@ -202,7 +202,7 @@ export async function GET() {
       return NextResponse.json({
         success: true,
         data: {
-          bucketName: process.env.S3_BUCKET_NAME || 'vigila-videos-912235389798',
+          bucketName: process.env.S3_BUCKET_NAME || 'vigila-videos-912235389798-logs',
           bucketRegion: process.env.AWS_REGION || 'us-east-1',
           totalSize: '2.3 GB',
           objectCount: 1247,
