@@ -145,7 +145,7 @@ export default function Dashboard() {
 
   const services = awsData ? [
     { name: 'AWS EC2 - Servidor Principal', status: (awsData.ec2?.[0]?.state === 'running' ? 'online' : 'offline') as const, lastUpdate: 'En tiempo real' },
-    { name: 'AWS RDS - Base de Datos', status: (awsData.rds?.[0]?.status === 'available' ? 'online' : 'offline') as const, lastUpdate: 'En tiempo real' },
+    { name: 'AWS RDS - Base de Datos', status: (awsData.rds?.[0]?.status === 'available' || awsData.rds?.[0]?.status === 'upgrading' ? 'online' : 'offline') as const, lastUpdate: 'En tiempo real' },
     { name: 'AWS S3 - Almacenamiento', status: (awsData.s3?.exists ? 'online' : 'offline') as const, lastUpdate: 'En tiempo real' },
     { name: 'CloudWatch - Monitoreo', status: 'online' as const, lastUpdate: 'En tiempo real' },
     { name: 'Application Load Balancer', status: 'online' as const, lastUpdate: 'En tiempo real' }

@@ -114,8 +114,8 @@ export const getEC2InstancesV3 = async () => {
     const command = new DescribeInstancesCommand({
       Filters: [
         {
-          Name: 'tag:Project',
-          Values: ['vigila-optimization']
+          Name: 'tag:Name',
+          Values: ['vigila-optimization-asg-instance']
         }
       ]
     })

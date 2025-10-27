@@ -17,10 +17,10 @@ export default function AWSStatus({ data, loading, error, sdkVersion }: AWSStatu
     error?: string
   }>({ status: 'idle' })
 
-  const testCredentialsV3 = async () => {
+  const testDiagnostic = async () => {
     setApiTest({ status: 'testing' })
     try {
-      const response = await fetch('/api/system-status-v3')
+      const response = await fetch('/api/diagnostic-aws')
       const result = await response.json()
       
       if (result.success) {
@@ -60,16 +60,16 @@ export default function AWSStatus({ data, loading, error, sdkVersion }: AWSStatu
           </div>
         </div>
 
-        {/* Test de Credenciales SDK v3 */}
+        {/* Test de Diagnóstico Completo */}
         <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-          <span className="font-medium">Test de Credenciales AWS (SDK v3):</span>
+          <span className="font-medium">Diagnóstico Completo AWS:</span>
           <div className="flex items-center space-x-2">
             <button
-              onClick={testCredentialsV3}
+              onClick={testDiagnostic}
               disabled={apiTest.status === 'testing'}
               className="btn-primary text-sm px-3 py-1"
             >
-              {apiTest.status === 'testing' ? 'Probando...' : 'Probar SDK v3'}
+              {apiTest.status === 'testing' ? 'Diagnosticando...' : 'Diagnóstico Completo'}
             </button>
             {apiTest.status === 'success' && <CheckCircle className="h-4 w-4 text-green-500" />}
             {apiTest.status === 'error' && <XCircle className="h-4 w-4 text-red-500" />}
