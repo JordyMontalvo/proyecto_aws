@@ -17,6 +17,7 @@ import {
   BarChart3
 } from 'lucide-react'
 import CameraGrid from '../components/CameraGrid'
+import { useAWSData } from '../lib/useAWSData'
 
 // Componente de tarjeta de métrica mejorado
 function MetricCard({ 
@@ -108,25 +109,23 @@ function ServiceStatus({
 
 export default function Dashboard() {
   const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString('es-ES'))
-  const [isLoading, setIsLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<'overview' | 'cameras' | 'analytics'>('overview')
+  
+  // Integración con AWS (opcional - descomentar para usar datos reales)
+  // const { data: awsData, loading: awsLoading, error: awsError } = useAWSData(30000)
 
   useEffect(() => {
-    // Simular carga inicial
-    const timer = setTimeout(() => setIsLoading(false), 2000)
-    
     // Actualizar tiempo cada segundo
     const timeInterval = setInterval(() => {
       setCurrentTime(new Date().toLocaleTimeString('es-ES'))
     }, 1000)
 
     return () => {
-      clearTimeout(timer)
       clearInterval(timeInterval)
     }
   }, [])
 
-  // Datos simulados para la demo
+  // Datos simulados para la demo (por ahora)
   const metrics = [
     { title: 'Cámaras Activas', value: '4/4', icon: Camera, trend: '+0% desde ayer', status: 'normal' as const, color: 'blue' as const },
     { title: 'Alertas Hoy', value: '12', icon: AlertTriangle, trend: '-25% vs ayer', status: 'normal' as const, color: 'yellow' as const },
@@ -143,23 +142,24 @@ export default function Dashboard() {
     { name: 'CloudWatch - Monitoreo', status: 'warning' as const, lastUpdate: 'Hace 5 minutos' },
     { name: 'Application Load Balancer', status: 'online' as const, lastUpdate: 'Hace 1 minuto' }
   ]
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
-          <h2 className="mt-4 text-xl font-semibold text-gray-700">Cargando Dashboard...</h2>
-          <p className="mt-2 text-gray-500">Conectando con servicios AWS</p>
-        </div>
-      </div>
-    )
-  }
+  
+  // Opcional: Muestra loading si AWS está cargando
+  // if (awsLoading) {
+  //   return (
+  //     <div className="min-h-screen flex items-center justify-center">
+  //       <div className="text-center">
+  //         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+  //         <h2 className="mt-4 text-xl font-semibold text-gray-700">Cargando Dashboard...</h2>
+  //         <p className="mt-2 text-gray-500">Conectando con servicios AWS</p>
+  //       </div>
+  //     </div>
+  //   )
+  // }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       {/* Background Pattern */}
-      <div className="fixed inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%239C92AC" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
+      <div className="fixed inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%239C92AC%22%20fill-opacity%3D%220.05%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%222%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
       
       {/* Header */}
       <header className="header-glass">

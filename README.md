@@ -36,19 +36,24 @@ Dashboard moderno y funcional para el sistema de vigilancia VIGILA, desarrollado
 ## 📁 **Estructura del Proyecto**
 
 ```
-vigila-dashboard/
+proyecto_aws/
 ├── src/
 │   ├── app/
-│   │   ├── page.tsx          # Dashboard principal
-│   │   ├── layout.tsx        # Layout con metadata
-│   │   └── globals.css       # Estilos globales
-│   └── components/
-│       ├── SecurityCamera.tsx # Componente de cámara
-│       └── CameraGrid.tsx     # Grid de cámaras
-├── package.json              # Dependencias
-├── tailwind.config.ts        # Configuración Tailwind
-├── vercel.json              # Configuración Vercel
-└── env.example              # Variables de entorno ejemplo
+│   │   ├── page.tsx              # Dashboard principal
+│   │   ├── layout.tsx            # Layout con metadata
+│   │   ├── globals.css           # Estilos globales
+│   │   └── api/
+│   │       └── system-status/   # API Route
+│   ├── components/
+│   │   ├── SecurityCamera.tsx     # Componente de cámara
+│   │   └── CameraGrid.tsx        # Grid de cámaras
+│   └── lib/
+│       ├── aws-service.ts         # Servicios AWS
+│       └── useAWSData.ts         # Hooks para datos
+├── package.json                  # Dependencias
+├── tailwind.config.ts            # Configuración Tailwind
+├── vercel.json                   # Configuración Vercel
+└── env.example                   # Variables de entorno ejemplo
 ```
 
 ## 🔧 **Configuración**
