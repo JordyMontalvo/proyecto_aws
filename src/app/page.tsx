@@ -150,8 +150,8 @@ export default function Dashboard() {
   const [isLive, setIsLive] = useState(true)
 
   // Hook principal con fallback robusto
-  const { data: awsData, loading: awsLoading, error: awsError } = useDetailedAWSData(30000)
-  const { data: fallbackData, loading: fallbackLoading, error: fallbackError, sdkVersion } = useAWSDataV3(30000)
+  const { data: awsData, loading: awsLoading, error: awsError } = useDetailedAWSData(30000) // 30 segundos
+  const { data: fallbackData, loading: fallbackLoading, error: fallbackError, sdkVersion } = useAWSDataV3(30000) // 30 segundos
 
   // Lógica de fallback inteligente
   const finalData = awsData || fallbackData
@@ -223,17 +223,6 @@ export default function Dashboard() {
     { name: 'Application Load Balancer', status: 'online' as const, lastUpdate: 'Ahora' }
   ] : []
 
-  if (finalLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-200 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-slate-300 border-t-blue-500 rounded-full animate-spin mx-auto mb-4"></div>
-          <h2 className="text-2xl font-bold text-slate-800 mb-2">Cargando Dashboard</h2>
-          <p className="text-slate-600">Conectando con servicios AWS...</p>
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-200">
