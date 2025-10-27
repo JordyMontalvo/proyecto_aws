@@ -116,6 +116,11 @@ export const useDetailedAWSData = (refreshInterval: number = 30000): UseDetailed
       setError(null)
       
       const response = await fetch('/api/detailed-status')
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
       const result = await response.json()
       
       if (result.success) {
@@ -124,6 +129,7 @@ export const useDetailedAWSData = (refreshInterval: number = 30000): UseDetailed
         setError(result.error || 'Failed to fetch detailed data')
       }
     } catch (err) {
+      console.error('Error fetching detailed AWS data:', err)
       setError(err instanceof Error ? err.message : 'Unknown error')
     } finally {
       setLoading(false)
