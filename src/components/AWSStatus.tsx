@@ -7,25 +7,26 @@ interface AWSStatusProps {
   data: any
   loading: boolean
   error: string | null
+  sdkVersion?: string
 }
 
-export default function AWSStatus({ data, loading, error }: AWSStatusProps) {
+export default function AWSStatus({ data, loading, error, sdkVersion }: AWSStatusProps) {
   const [apiTest, setApiTest] = useState<{
     status: 'idle' | 'testing' | 'success' | 'error'
     response?: any
     error?: string
   }>({ status: 'idle' })
 
-  const testCredentials = async () => {
+  const testCredentialsV3 = async () => {
     setApiTest({ status: 'testing' })
     try {
-      const response = await fetch('/api/test-aws')
+      const response = await fetch('/api/system-status-v3')
       const result = await response.json()
       
       if (result.success) {
         setApiTest({ status: 'success', response: result })
       } else {
-        setApiTest({ status: 'error', error: result.message })
+        setApiTest({ status: 'error', error: result.error })
       }
     } catch (err) {
       setApiTest({ status: 'error', error: err instanceof Error ? err.message : 'Unknown error' })
@@ -59,21 +60,37 @@ export default function AWSStatus({ data, loading, error }: AWSStatusProps) {
           </div>
         </div>
 
-        {/* Test de Credenciales */}
+        {/* Test de Credenciales SDK v3 */}
         <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-          <span className="font-medium">Test de Credenciales AWS:</span>
+          <span className="font-medium">Test de Credenciales AWS (SDK v3):</span>
           <div className="flex items-center space-x-2">
             <button
-              onClick={testCredentials}
+              onClick={testCredentialsV3}
               disabled={apiTest.status === 'testing'}
               className="btn-primary text-sm px-3 py-1"
             >
-              {apiTest.status === 'testing' ? 'Probando...' : 'Probar Credenciales'}
+              {apiTest.status === 'testing' ? 'Probando...' : 'Probar SDK v3'}
             </button>
             {apiTest.status === 'success' && <CheckCircle className="h-4 w-4 text-green-500" />}
             {apiTest.status === 'error' && <XCircle className="h-4 w-4 text-red-500" />}
           </div>
         </div>
+
+        {/* SDK Version */}
+        {sdkVersion && (
+          <div className="p-4 bg-blue-50 rounded-lg">
+            <h4 className="font-medium mb-2 text-blue-800">SDK Version:</h4>
+            <div className="text-sm text-blue-700">
+              <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                sdkVersion === 'v3' ? 'bg-green-100 text-green-800' :
+                sdkVersion === 'v2' ? 'bg-yellow-100 text-yellow-800' :
+                'bg-red-100 text-red-800'
+              }`}>
+                AWS SDK {sdkVersion}
+              </span>
+            </div>
+          </div>
+        )}
 
         {/* Variables de Entorno */}
         <div className="p-4 bg-gray-50 rounded-lg">

@@ -18,7 +18,7 @@ import {
 } from 'lucide-react'
 import CameraGrid from '../components/CameraGrid'
 import AWSStatus from '../components/AWSStatus'
-import { useAWSData } from '../lib/useAWSData'
+import { useAWSDataV3 } from '../lib/useAWSData-v3'
 
 // Componente de tarjeta de métrica mejorado
 function MetricCard({ 
@@ -112,8 +112,8 @@ export default function Dashboard() {
   const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString('es-ES'))
   const [activeTab, setActiveTab] = useState<'overview' | 'cameras' | 'analytics'>('overview')
   
-  // Integración con AWS - ACTIVADA
-  const { data: awsData, loading: awsLoading, error: awsError } = useAWSData(30000)
+  // Integración con AWS - ACTIVADA (SDK v3 con fallback v2)
+  const { data: awsData, loading: awsLoading, error: awsError, sdkVersion } = useAWSDataV3(30000)
 
   useEffect(() => {
     // Actualizar tiempo cada segundo
@@ -272,7 +272,9 @@ export default function Dashboard() {
                 {awsData && (
                   <div className="flex items-center space-x-2 bg-green-100 px-4 py-2 rounded-full shadow-lg">
                     <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                    <span className="text-sm font-medium text-green-700">Datos en Tiempo Real</span>
+                    <span className="text-sm font-medium text-green-700">
+                      Datos en Tiempo Real (SDK {sdkVersion})
+                    </span>
                   </div>
                 )}
               </div>
@@ -408,7 +410,7 @@ export default function Dashboard() {
             </div>
 
             {/* AWS Status Debug */}
-            <AWSStatus data={awsData} loading={awsLoading} error={awsError} />
+            <AWSStatus data={awsData} loading={awsLoading} error={awsError} sdkVersion={sdkVersion} />
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="card slide-up">
