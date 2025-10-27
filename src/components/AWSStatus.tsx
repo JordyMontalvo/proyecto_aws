@@ -16,16 +16,16 @@ export default function AWSStatus({ data, loading, error }: AWSStatusProps) {
     error?: string
   }>({ status: 'idle' })
 
-  const testAPI = async () => {
+  const testCredentials = async () => {
     setApiTest({ status: 'testing' })
     try {
-      const response = await fetch('/api/system-status')
+      const response = await fetch('/api/test-aws')
       const result = await response.json()
       
       if (result.success) {
-        setApiTest({ status: 'success', response: result.data })
+        setApiTest({ status: 'success', response: result })
       } else {
-        setApiTest({ status: 'error', error: result.error })
+        setApiTest({ status: 'error', error: result.message })
       }
     } catch (err) {
       setApiTest({ status: 'error', error: err instanceof Error ? err.message : 'Unknown error' })
@@ -59,16 +59,16 @@ export default function AWSStatus({ data, loading, error }: AWSStatusProps) {
           </div>
         </div>
 
-        {/* Test de API */}
+        {/* Test de Credenciales */}
         <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-          <span className="font-medium">API /api/system-status:</span>
+          <span className="font-medium">Test de Credenciales AWS:</span>
           <div className="flex items-center space-x-2">
             <button
-              onClick={testAPI}
+              onClick={testCredentials}
               disabled={apiTest.status === 'testing'}
               className="btn-primary text-sm px-3 py-1"
             >
-              {apiTest.status === 'testing' ? 'Probando...' : 'Probar API'}
+              {apiTest.status === 'testing' ? 'Probando...' : 'Probar Credenciales'}
             </button>
             {apiTest.status === 'success' && <CheckCircle className="h-4 w-4 text-green-500" />}
             {apiTest.status === 'error' && <XCircle className="h-4 w-4 text-red-500" />}

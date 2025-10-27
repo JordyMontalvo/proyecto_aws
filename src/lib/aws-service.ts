@@ -2,10 +2,20 @@ import AWS from 'aws-sdk'
 
 // Configurar AWS SDK
 const configureAWS = () => {
+  // Verificar que las credenciales estén disponibles
+  if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
+    throw new Error('AWS credentials not configured')
+  }
+
   AWS.config.update({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    region: process.env.AWS_REGION || 'us-east-1'
+    region: process.env.AWS_REGION || 'us-east-1',
+    signatureVersion: 'v4',
+    maxRetries: 3,
+    retryDelayOptions: {
+      base: 300
+    }
   })
 }
 
@@ -16,18 +26,22 @@ let rds: AWS.RDS
 let s3: AWS.S3
 
 const initializeAWSServices = () => {
-  configureAWS()
-  cloudWatch = new AWS.CloudWatch()
-  ec2 = new AWS.EC2()
-  rds = new AWS.RDS()
-  s3 = new AWS.S3()
+  try {
+    configureAWS()
+    cloudWatch = new AWS.CloudWatch()
+    ec2 = new AWS.EC2()
+    rds = new AWS.RDS()
+    s3 = new AWS.S3()
+  } catch (error) {
+    console.error('Error initializing AWS services:', error)
+    throw error
+  }
 }
 
 // Obtener métricas de CloudWatch
 export const getCloudWatchMetrics = async () => {
-  if (!cloudWatch) initializeAWSServices()
-
   try {
+    if (!cloudWatch) initializeAWSServices()
     const endTime = new Date()
     const startTime = new Date(endTime.getTime() - 24 * 60 * 60 * 1000) // Últimas 24 horas
 
@@ -79,9 +93,8 @@ export const getCloudWatchMetrics = async () => {
 
 // Obtener estado de instancias EC2
 export const getEC2Instances = async () => {
-  if (!ec2) initializeAWSServices()
-
   try {
+    if (!ec2) initializeAWSServices()
     const params = {
       Filters: [
         {
@@ -119,9 +132,8 @@ export const getEC2Instances = async () => {
 
 // Obtener estado de RDS
 export const getRDSInstances = async () => {
-  if (!rds) initializeAWSServices()
-
   try {
+    if (!rds) initializeAWSServices()
     const params = {
       DBInstanceIdentifier: 'vigila-optimization-db'
     }
@@ -152,9 +164,8 @@ export const getRDSInstances = async () => {
 
 // Obtener información de S3
 export const getS3Info = async () => {
-  if (!s3) initializeAWSServices()
-
   try {
+    if (!s3) initializeAWSServices()
     const bucketName = process.env.S3_BUCKET_NAME || 'vigila-videos-912235389798'
     
     // Obtener información del bucket
@@ -214,6 +225,41 @@ export const getALBMetrics = async () => {
   } catch (error) {
     console.error('Error fetching ALB metrics:', error)
     throw error
+  }
+}
+
+// Función de diagnóstico para verificar credenciales
+export const testAWSCredentials = async () => {
+  try {
+    if (!cloudWatch) initializeAWSServices()
+    
+    // Prueba simple con CloudWatch
+    const params = {
+      Namespace: 'AWS/EC2',
+      MetricName: 'CPUUtilization',
+      StartTime: new Date(Date.now() - 3600000), // 1 hora atrás
+      EndTime: new Date(),
+      Period: 3600,
+      Statistics: ['Average']
+    }
+    
+    const result = await cloudWatch.getMetricStatistics(params).promise()
+    
+    return {
+      success: true,
+      message: 'Credenciales AWS válidas',
+      data: {
+        region: AWS.config.region,
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID?.substring(0, 8) + '...',
+        metricsCount: result.Datapoints?.length || 0
+      }
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Error desconocido',
+      error: error
+    }
   }
 }
 
