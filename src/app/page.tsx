@@ -24,7 +24,10 @@ import RealCameraCapture from '../components/RealCameraCapture'
 import SurveillanceDemo from '../components/SurveillanceDemo'
 import RealTimeAlertSystem from '../components/RealTimeAlertSystem'
 import S3StorageInfo from '../components/S3StorageInfo'
-import AlertAnalytics from '../components/AlertAnalytics'
+import AWSDataTables from '../components/AWSDataTables'
+import CameraCaptureTables from '../components/CameraCaptureTables'
+import MetricsDashboard from '../components/MetricsDashboard'
+import ConfigurationStatus from '../components/ConfigurationStatus'
 import AWSStatus from '../components/AWSStatus'
 import { EC2Table, RDSTable, S3Table, MetricsCard } from '../components/DetailedTables'
 import { useDetailedAWSData } from '../lib/useDetailedAWSData'
@@ -400,6 +403,14 @@ export default function Dashboard() {
             </div>
             
             <div className="card">
+              <ConfigurationStatus />
+            </div>
+            
+            <div className="card">
+              <MetricsDashboard />
+            </div>
+            
+            <div className="card">
               <RealCameraCapture />
             </div>
             
@@ -417,6 +428,14 @@ export default function Dashboard() {
             
             <div className="card">
               <AlertAnalytics />
+            </div>
+            
+            <div className="card">
+              <AWSDataTables />
+            </div>
+            
+            <div className="card">
+              <CameraCaptureTables />
             </div>
             
             <div className="card">

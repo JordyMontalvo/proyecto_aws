@@ -11,6 +11,7 @@ interface S3Info {
   lastModified: string
   surveillanceFolder: string
   message: string
+  simulated?: boolean
 }
 
 export default function S3StorageInfo() {
@@ -90,13 +91,29 @@ export default function S3StorageInfo() {
         </h3>
         
         <div className="flex items-center text-sm text-slate-600">
-          <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
-          <span>Conectado</span>
+          <div className={`w-3 h-3 rounded-full mr-2 ${s3Info?.simulated ? 'bg-yellow-500' : 'bg-green-500'}`}></div>
+          <span>{s3Info?.simulated ? 'Modo Demo' : 'Conectado'}</span>
         </div>
       </div>
 
       {s3Info && (
         <>
+          {/* Notificación de Modo Demo */}
+          {s3Info.simulated && (
+            <div className="mb-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+              <div className="flex items-center">
+                <div className="w-3 h-3 bg-yellow-500 rounded-full mr-3"></div>
+                <div>
+                  <h4 className="font-semibold text-yellow-800">Modo Demo Activo</h4>
+                  <p className="text-sm text-yellow-600">
+                    El sistema está funcionando en modo demo. Las capturas se procesan localmente.
+                    Para usar S3 real, configura las credenciales AWS en las variables de entorno.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Información del Bucket */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">

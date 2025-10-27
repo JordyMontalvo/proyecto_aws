@@ -171,7 +171,7 @@ export default function RealCameraCapture({ onCapture }: RealCameraCaptureProps)
       onCapture?.(captureData)
 
       // Mostrar notificación
-      showNotification('¡Imagen capturada y subida a S3!', 'success')
+      showNotification('¡Imagen capturada y procesada!', 'success')
 
     } catch (err) {
       console.error('Error capturing image:', err)
@@ -264,7 +264,7 @@ export default function RealCameraCapture({ onCapture }: RealCameraCaptureProps)
 
         setCaptures(prev => [captureData, ...prev])
         onCapture?.(captureData)
-        showNotification('¡Video grabado y subido a S3!', 'success')
+        showNotification('¡Video grabado y procesado!', 'success')
       }
 
       mediaRecorder.start()
@@ -426,7 +426,7 @@ export default function RealCameraCapture({ onCapture }: RealCameraCaptureProps)
         </div>
         
         <p className="text-sm text-slate-600 mt-2">
-          Las capturas se suben automáticamente a Amazon S3 para almacenamiento seguro
+          Las capturas se procesan automáticamente. En modo demo se almacenan localmente.
         </p>
         
         {/* Indicador de progreso de subida */}
