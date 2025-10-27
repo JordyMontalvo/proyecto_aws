@@ -29,7 +29,7 @@ interface AlertTrend {
   critical: number
 }
 
-export default function AlertAnalytics() {
+function AlertAnalytics() {
   const [heatmapData, setHeatmapData] = useState<AlertHeatmapData[]>([])
   const [trendData, setTrendData] = useState<AlertTrend[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -315,3 +315,5 @@ export default function AlertAnalytics() {
     </div>
   )
 }
+
+export default AlertAnalytics
